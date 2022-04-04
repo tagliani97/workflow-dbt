@@ -9,7 +9,7 @@ For more Data & Analytics related reading, check https://analyticsmayhem.com
 
 ## Setup 
 * Clone the repository
-* Extract the CSV files within ./sample_data directory (files are needed as seed data)
+* Extract the CSV files from sample_data.7z within ./sample_data directory (files are needed as seed data)
 
 Change directory within the repository and run `docker-compose up`. This will perform the following:
 * Based on the definition of [`docker-compose.yml`](https://github.com/konosp/dbt-airflow-docker-compose/blob/master/docker-compose.yml) will download the necessary images to run the project. This includes the following services:
@@ -19,7 +19,8 @@ Change directory within the repository and run `docker-compose up`. This will pe
   * adminer: a lightweight DB client
 
 ## Connections
-* Adminer UI: [http://localhost:8080](http://localhost:8080/?pgsql=postgres-dbt&username=dbtuser&db=dbtdb&ns=dbt) Credentials as defined at [`docker-compose.yml`](https://github.com/konosp/dbt-airflow-docker-compose/blob/master/docker-compose.yml)
+*  DBVEAR POSTGRES-DBT: Credentials as defined at [`docker-compose.yml`]
+
 * Airflow UI: http://localhost:8000
 
 ## How to ran the DAGs
