@@ -19,7 +19,7 @@ Change directory within the repository and run `docker-compose up`. This will pe
   * adminer: a lightweight DB client
 
 ## Connections
-*  DBVEAR POSTGRES-DBT: Credentials as defined at [`docker-compose.yml`]
+* POSTGRES-DBT: 
 
 * Airflow UI: http://localhost:8000
 

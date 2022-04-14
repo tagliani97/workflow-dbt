@@ -69,7 +69,7 @@ t7 = PostgresOperator(task_id='load_departments',
                       postgres_conn_id='dbt_postgres_instance_raw_data',
                       autocommit=True,
                       database="dbtdb",
-                      dag=load_initial_data_dag)                     
+                      dag=load_initial_data_dag)
 
 t8 = PostgresOperator(task_id='drop_table_products',
                       sql="DROP TABLE IF EXISTS aisles;",
@@ -132,7 +132,7 @@ t19 = PostgresOperator(task_id='load_order_products__train',
                       postgres_conn_id='dbt_postgres_instance_raw_data',
                       autocommit=True,
                       database="dbtdb",
-                      dag=load_initial_data_dag)       
+                      dag=load_initial_data_dag)
 
 t1 >> t2 >> t3 >> t4
 t1 >> t5 >> t6 >> t7

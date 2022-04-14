@@ -1,0 +1,5 @@
+{
+    "DagId": "dbt_clean_orders",
+    "Schedule": "@daily",
+    "RunCommand":"--models dbt_clean_orders"
+}
