@@ -1,0 +1,3 @@
+airflow_dag_path: '/airflow/dags'
+config_dag: '/airflow/artifacts/config_json/'
+template_filename: '/airflow/artifacts/template/dag-template.py'

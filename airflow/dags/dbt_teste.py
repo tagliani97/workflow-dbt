@@ -10,7 +10,7 @@ default_args = {
 }
 
 with DAG(
-    'dbt_clean_orders',
+    'dbt_teste',
     default_args=default_args,
     schedule_interval='@daily'
 ) as dag:

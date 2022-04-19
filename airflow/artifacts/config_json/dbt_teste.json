@@ -1,5 +1,5 @@
 {
-    "dag_id": "dbt_clean_orders",
+    "dag_id": "dbt_teste",
     "dag_schedule": "@daily",
     "dbt_run":"--models dbt_clean_orders",
     "edit_template": false
