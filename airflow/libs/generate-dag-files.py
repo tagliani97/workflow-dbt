@@ -3,6 +3,7 @@ import os
 import shutil
 import yaml
 import fileinput
+import sys
 from yaml.loader import SafeLoader
 
 
@@ -43,10 +44,22 @@ class GenerateDag:
             )
 
             if kwargs.get("edit_template") is False:
-                shutil.copyfile(
-                    yml_conf['template_filename'],
-                    new_filename
-                )
+                try:
+                    template_file = f"""
+                    {
+                        yml_conf['template_path']
+                    }
+                    {
+                        json_conf['template-name']
+                    }.py""",
+                    shutil.copyfile(
+                        template_file,
+                        new_filename
+                    )
+
+                except Exception as e:
+                    print("Erro ao copiar arquivo de template", e)
+                    sys.exit()
 
             for line in fileinput.input(new_filename, inplace=True):
                 line = line\
