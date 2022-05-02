@@ -1,6 +1,0 @@
-{
-    "dag_id": "dbt_vendas",
-    "dag_schedule": "@daily",
-    "dbt_run":"--models dbt_clean_orders",
-    "edit_template": false
-}

@@ -17,7 +17,7 @@ with DAG(
 
     task_1 = BashOperator(
         task_id='daily_transform',
-        bash_command='cd /dbt && dbt run --models dbt_clean_orders',
+        bash_command='cd /home/ubuntu/dbt/rd-da-dw-dbt-etl && dbt run --models dbt_clean_orders',
         dag=dag
     )
 

@@ -1,0 +1,7 @@
+{
+    "dag_id": "dbt_clean_ordersss",
+    "dag_schedule": "@daily",
+    "dbt_run":"--models dbt_clean_orders",
+    "edit_template": false,
+    "template-name": "dag-template"
+}
