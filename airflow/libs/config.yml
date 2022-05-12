@@ -1,3 +1,0 @@
-airflow_dag_path: '/airflow/dags'
-config_dag: '/airflow/artifacts/config_json/'
-template_path: '/airflow/artifacts/template/'

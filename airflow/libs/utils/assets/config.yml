@@ -1,0 +1,8 @@
+airflow_dag_path: '/home/ubuntu/image_airflow_dbt/rd-da-dw-dbt-etl/dags'
+config_dag: '/home/ubuntu/image_airflow_dbt/rd-da-dw-dbt-etl/artifacts/config_json/'
+template_path: '/home/ubuntu/image_airflow_dbt/rd-da-dw-dbt-etl/artifacts/template/'
+
+dbt_path: '/opt/airflow/dbt/rd-da-dw-dbt-etl'
+docker_command: 'docker exec -i  image_airflow_dbt_dbt-container_1 bash -c'
+docker_delete_command: 'docker exec -u root -i image_airflow_dbt_airflow-webserver_1 bash -c'
+

@@ -1,37 +1,26 @@
-import json
-import os
-import yaml
-from yaml.loader import SafeLoader
-from dag import Control
+from utils.dag import Control
+from utils.conf_yaml import ConfigPath
 
 
 class Airflow:
 
     def __init__(
         self,
-        config_filepath
+        json_conf,
+        yml_conf
     ):
-        self.config_filepath = config_filepath
-
-    def read_conf(self) -> dict:
-
-        with open(self.config_filepath) as f:
-            yml_conf = yaml.load(f, Loader=SafeLoader)
-
-        json_conf = {}
-        for filename in os.listdir(yml_conf["config_dag"]):
-            if 'json' in filename:
-                f = open(yml_conf["config_dag"] + filename)
-                json_conf[filename] = json.load(f)
-
-        return json_conf, yml_conf
+        self.json_conf = json_conf
+        self.yml_conf = yml_conf
 
     def control_dag(self):
 
-        json_conf, yml_conf = self.read_conf()
+        for kwargs in self.json_conf.values():
+            if kwargs.get("delete_dag"):
+                Control.delete_dag(kwargs.get("dag_id"), **yml_conf)
+            else:
+                Control.create_dag(self.yml_conf, **kwargs)
 
-        Control(json_conf, yml_conf).create_dag()
 
-
-config_filepath = 'config.yml'
-Airflow(config_filepath).control_dag()
+if __name__ == '__main__':
+    json_conf, yml_conf = ConfigPath.configuration_files()
+    Airflow(json_conf, yml_conf).control_dag()
