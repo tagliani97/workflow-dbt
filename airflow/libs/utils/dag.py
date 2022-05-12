@@ -3,6 +3,8 @@ import fileinput
 import os
 
 
+
+
 class Control:
 
     @staticmethod
@@ -11,6 +13,8 @@ class Control:
         dag_id = kwargs.get("dag_id")
         dag_schedule = kwargs.get("dag_schedule")
         dbt_run = kwargs.get("dbt_run")
+        template_name = kwargs.get("template-name")
+        dependence = kwargs.get("dependence")
 
         new_filename = "{0}/{1}.py".format(
             yml_conf['airflow_dag_path'],
@@ -21,7 +25,7 @@ class Control:
             try:
                 template_file = "{0}{1}.py".format(
                     yml_conf['template_path'],
-                    kwargs.get('template-name')
+                    template_name
                 )
                 shutil.copyfile(
                     template_file,
@@ -34,9 +38,10 @@ class Control:
             for r in (
                 ("dag_json_dag_id", dag_id),
                 ("dag_json_schedule", dag_schedule),
-                ("dbt_json_command", dbt_run),
+                ("dbt_run", dbt_run),
                 ("dbt_yml_path", yml_conf['dbt_path']),
-                ("docker_yml_cmd", yml_conf['docker_command'])
+                ("deps_bash_cmd", "{0}".format(dependence.get("command"))),
+                ("deps_names", "{0}".format(dependence.get("names")))
             ):
                 line = line.replace(*r)
 
@@ -57,3 +62,4 @@ class Control:
                 "cd {path_logs} ; rm -r {dag_id}/"')
         except Exception as e:
             print("Falha ao deletar a dag", e)
+

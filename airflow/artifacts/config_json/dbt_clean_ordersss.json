@@ -1,7 +1,11 @@
 {
     "dag_id": "dbt_clean_ordersss",
     "dag_schedule": "@daily",
-    "dbt_run":"--models dbt_clean_orders",
     "edit_template": false,
-    "template-name": "dag-template"
+    "dbt_run": "",
+    "template-name": "single-dependence",
+    "dependence":{
+        "names": ["dag_1", "dag_2"],
+        "command": ["echo teste deps", "echo teste tagliani"]
+    }
 }
