@@ -24,8 +24,8 @@ with DAG(
 
     for key, value in a_dictionary.items():
         task = BashOperator(
-            task_id=f'task-{key}',
-            bash_command=f'echo {value}',
+            task_id=f'{key}',
+            bash_command=f'{value}',
         )
         if previous_task is not None:
             previous_task >> task
