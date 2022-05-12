@@ -3,8 +3,6 @@ import fileinput
 import os
 
 
-
-
 class Control:
 
     @staticmethod
@@ -12,9 +10,8 @@ class Control:
 
         dag_id = kwargs.get("dag_id")
         dag_schedule = kwargs.get("dag_schedule")
-        dbt_run = kwargs.get("dbt_run")
         template_name = kwargs.get("template-name")
-        dependence = kwargs.get("dependence")
+        dependence = kwargs.get("airflow-task")
 
         new_filename = "{0}/{1}.py".format(
             yml_conf['airflow_dag_path'],
@@ -38,13 +35,11 @@ class Control:
             for r in (
                 ("dag_json_dag_id", dag_id),
                 ("dag_json_schedule", dag_schedule),
-                ("dbt_run", dbt_run),
                 ("dbt_yml_path", yml_conf['dbt_path']),
-                ("deps_bash_cmd", "{0}".format(dependence.get("command"))),
-                ("deps_names", "{0}".format(dependence.get("names")))
+                ("deps_bash_cmd", "{0}".format(dependence.get("task-command"))),
+                ("deps_names", "{0}".format(dependence.get("task-name")))
             ):
                 line = line.replace(*r)
-
             print(line, end="")
 
     @staticmethod
@@ -62,4 +57,5 @@ class Control:
                 "cd {path_logs} ; rm -r {dag_id}/"')
         except Exception as e:
             print("Falha ao deletar a dag", e)
+
 

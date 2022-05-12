@@ -21,6 +21,7 @@ with DAG(
     zip_iterator = zip(list_depen_names, list_depen_cmd)
     a_dictionary = dict(zip_iterator)
     previous_task = None
+    bash_cmmd = ""
 
     for key, value in a_dictionary.items():
         task = BashOperator(

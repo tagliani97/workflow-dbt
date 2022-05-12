@@ -1,11 +1,10 @@
 {
     "dag_id": "dbt_clean_ordersss",
     "dag_schedule": "@daily",
+    "template-name": "default-template",
     "edit_template": false,
-    "dbt_run": "",
-    "template-name": "single-dependence",
-    "dependence":{
-        "names": ["dag_1", "dag_2"],
-        "command": ["echo teste deps", "echo teste tagliani"]
+    "airflow-task":{
+        "task-name": ["dag_1"],
+        "task-command": ["echo teste deps"]
     }
 }
