@@ -16,7 +16,7 @@ with DAG(
     schedule_interval='@daily'
 ) as dag:
 
-    list_depen_cmd = ['echo teste deps ; echo asdasd']
+    list_depen_cmd = ['echo teste deps']
     list_depen_names = ['dag_1']
     zip_iterator = zip(list_depen_names, list_depen_cmd)
     a_dictionary = dict(zip_iterator)

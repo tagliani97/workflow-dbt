@@ -8,19 +8,21 @@ class Control:
     def __init__(self, yml_conf, kwargs):
         self.yml_conf = yml_conf
         self.kwargs = kwargs
+        self.dag_id = kwargs.get("dag-id")
+        self.dag_schedule = kwargs.get("dag-schedule")
+        self.edit_template = kwargs.get("edit-template")
+        self.template_name = kwargs.get("template-name")
+        self.dependence = kwargs.get("airflow-task")
 
     def dict_control(self):
 
         yml_path = self.yml_conf['dbt_path']
-        dag_id = self.kwargs.get("dag_id")
-        dag_schedule = self.kwargs.get("dag_schedule")
-        dependence = self.kwargs.get("airflow-task")
-        task_cmmd = dependence.get("task-command")
-        task_name = dependence.get("task-name")
+        task_cmmd = self.dependence.get("task-command")
+        task_name = self.dependence.get("task-name")
 
         dict = {
-            "dag_json_dag_id": dag_id,
-            "dag_json_schedule": dag_schedule,
+            "dag_json_dag_id": self.dag_id,
+            "dag_json_schedule": self.dag_schedule,
             "dbt_yml_path": yml_path,
             "deps_bash_cmd": "{0}".format(task_cmmd),
             "deps_names": "{0}".format(task_name)
@@ -32,20 +34,17 @@ class Control:
 
         airflow_dag_path = self.yml_conf['airflow_dag_path']
         template_path = self.yml_conf['template_path']
-        dag_id = self.kwargs.get("dag_id")
-        template_name = self.kwargs.get("template-name")
-        edit_template = self.kwargs.get("edit_template")
 
         new_filename = "{0}/{1}.py".format(
             airflow_dag_path,
-            dag_id
+            self.dag_id
         )
 
-        if edit_template is False:
+        if self.edit_template is False:
             try:
                 template_file = "{0}{1}.py".format(
                     template_path,
-                    template_name
+                    self.template_name
                 )
                 shutil.copyfile(
                     template_file,
@@ -61,18 +60,18 @@ class Control:
 
     def delete_dag(self):
 
-        dag_id = self.kwargs.get("dag_id")
         docker_delete_cmd = self.yml_conf["docker_delete_command"]
         path_dags_container = self.yml_conf["repositorio"]
         path_logs = self.yml_conf["dags_logs"]
+
         try:
             os.system(f'{docker_delete_cmd} \
-                "cd {path_dags_container} ; airflow dags delete -y {dag_id}"')
+                "cd {path_dags_container} ; airflow dags delete -y \
+                    {self.dag_id}"')
             os.system(f'{docker_delete_cmd} \
-                "cd {path_dags_container} ; rm -r {dag_id}.py"')
+                "cd {path_dags_container} ; rm -r {self.dag_id}.py"')
             os.system(f'{docker_delete_cmd} \
-                "cd {path_logs} ; rm -r {dag_id}/"')
+                "cd {path_logs} ; rm -r {self.dag_id}/"')
         except Exception as e:
             print("Falha ao deletar a dag", e)
-
 

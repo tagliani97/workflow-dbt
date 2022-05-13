@@ -1,8 +1,8 @@
 {
-    "dag_id": "dbt_clean_ordersss",
-    "dag_schedule": "@daily",
+    "dag-id": "dbt_clean_ordersss",
+    "dag-schedule": "@daily",
     "template-name": "default-template",
-    "edit_template": false,
+    "edit-template": false,
     "airflow-task":{
         "task-name": ["dag_1"],
         "task-command": ["echo teste deps"]
