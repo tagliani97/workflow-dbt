@@ -11,17 +11,17 @@ default_args = {
 }
 
 with DAG(
-    'dag_json_dag_id',
+    'dbt_clean_ordersss',
     default_args=default_args,
-    schedule_interval='dag_json_schedule'
+    schedule_interval='@daily'
 ) as dag:
 
-    list_depen_cmd = deps_bash_cmd
-    list_depen_names = deps_names
+    list_depen_cmd = ['echo teste deps ; echo asdasd']
+    list_depen_names = ['dag_1']
     zip_iterator = zip(list_depen_names, list_depen_cmd)
     a_dictionary = dict(zip_iterator)
     previous_task = None
-    bash_cmmd = "cd dbt_yml_path"
+    bash_cmmd = "cd /dbt"
 
     for key, value in a_dictionary.items():
         task = BashOperator(

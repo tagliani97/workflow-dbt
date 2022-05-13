@@ -5,23 +5,46 @@ import os
 
 class Control:
 
-    @staticmethod
-    def create_dag(yml_conf, **kwargs):
+    def __init__(self, yml_conf, kwargs):
+        self.yml_conf = yml_conf
+        self.kwargs = kwargs
 
-        dag_id = kwargs.get("dag_id")
-        dag_schedule = kwargs.get("dag_schedule")
-        template_name = kwargs.get("template-name")
-        dependence = kwargs.get("airflow-task")
+    def dict_control(self):
+
+        yml_path = self.yml_conf['dbt_path']
+        dag_id = self.kwargs.get("dag_id")
+        dag_schedule = self.kwargs.get("dag_schedule")
+        dependence = self.kwargs.get("airflow-task")
+        task_cmmd = dependence.get("task-command")
+        task_name = dependence.get("task-name")
+
+        dict = {
+            "dag_json_dag_id": dag_id,
+            "dag_json_schedule": dag_schedule,
+            "dbt_yml_path": yml_path,
+            "deps_bash_cmd": "{0}".format(task_cmmd),
+            "deps_names": "{0}".format(task_name)
+        }
+
+        return dict
+
+    def create_dag(self, dict_replace):
+
+        airflow_dag_path = self.yml_conf['airflow_dag_path']
+        template_path = self.yml_conf['template_path']
+        dag_id = self.kwargs.get("dag_id")
+        template_name = self.kwargs.get("template-name")
+        edit_template = self.kwargs.get("edit_template")
 
         new_filename = "{0}/{1}.py".format(
-            yml_conf['airflow_dag_path'],
+            airflow_dag_path,
             dag_id
         )
 
-        if kwargs.get("edit_template") is False:
+        if edit_template is False:
             try:
                 template_file = "{0}{1}.py".format(
-                    yml_conf['template_path'],
+                    template_path,
                     template_name
                 )
                 shutil.copyfile(
@@ -32,22 +55,16 @@ class Control:
                 print("Erro ao copiar arquivo de template", e)
 
         for line in fileinput.input(new_filename, inplace=True):
-            for r in (
-                ("dag_json_dag_id", dag_id),
-                ("dag_json_schedule", dag_schedule),
-                ("dbt_yml_path", yml_conf['dbt_path']),
-                ("deps_bash_cmd", "{0}".format(dependence.get("task-command"))),
-                ("deps_names", "{0}".format(dependence.get("task-name")))
-            ):
+            for r in dict_replace.items():
                 line = line.replace(*r)
             print(line, end="")
 
-    @staticmethod
-    def delete_dag(dag_id, **yml_conf):
+    def delete_dag(self):
 
-        docker_delete_cmd = yml_conf["docker_delete_command"]
-        path_dags_container = '/opt/airflow/dags/rd-da-dw-dbt-etl'
-        path_logs = '/opt/airflow/logs'
+        dag_id = self.kwargs.get("dag_id")
+        docker_delete_cmd = self.yml_conf["docker_delete_command"]
+        path_dags_container = self.yml_conf["repositorio"]
+        path_logs = self.yml_conf["dags_logs"]
         try:
             os.system(f'{docker_delete_cmd} \
                 "cd {path_dags_container} ; airflow dags delete -y {dag_id}"')

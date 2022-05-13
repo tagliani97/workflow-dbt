@@ -2,3 +2,6 @@ airflow_dag_path: '/airflow/dags'
 config_dag: '/airflow/artifacts/config_json/'
 template_path: '/airflow/artifacts/template/'
 dbt_path: '/dbt'
+
+repositorio: '/opt/airflow/dags/rd-da-dw-dbt-etl'
+dags_logs: '/opt/airflow/logs'

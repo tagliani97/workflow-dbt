@@ -15,10 +15,12 @@ class Airflow:
     def control_dag(self):
 
         for kwargs in self.json_conf.values():
+            init_control = Control(self.yml_conf, kwargs)
             if kwargs.get("delete_dag"):
-                Control.delete_dag(kwargs.get("dag_id"), **yml_conf)
+                init_control.delete_dag()
             else:
-                Control.create_dag(self.yml_conf, **kwargs)
+                dict_replace = init_control.dict_control()
+                init_control.create_dag(dict_replace)
 
 
 if __name__ == '__main__':
