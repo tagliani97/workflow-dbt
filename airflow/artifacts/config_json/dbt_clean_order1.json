@@ -1,10 +1,10 @@
 {
-    "dag-id": "dbt_clean_ordersss",
+    "dag-id": "dbt_clean",
     "dag-schedule": "@daily",
     "template-name": "default-template",
     "edit-template": false,
     "airflow-task":{
-        "task-name": ["dag_1"],
-        "task-command": ["echo teste deps"]
+        "task-name": ["dag_1", "dag2"],
+        "task-command": ["ipconfig", "echo teste"]
     }
 }
