@@ -1,0 +1,10 @@
+{
+    "dag-id": "stage-teste-template",
+    "dag-schedule": "@daily",
+    "template-name": "stage-template",
+    "edit-template": false,
+    "bash-task":{
+        "task-dbt-1": "echo teste"
+        ,"task-dbt-2": "echo opa"
+    }
+}

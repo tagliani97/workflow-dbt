@@ -12,20 +12,19 @@ class Control:
         self.dag_schedule = kwargs.get("dag-schedule")
         self.edit_template = kwargs.get("edit-template")
         self.template_name = kwargs.get("template-name")
-        self.dependence = kwargs.get("airflow-task")
+        self.bash_task = kwargs.get("bash-task")
+        self.flag_task = kwargs.get("flag-task")
 
     def dict_control(self):
 
         yml_path = self.yml_conf['dbt_path']
-        task_cmmd = self.dependence.get("task-command")
-        task_name = self.dependence.get("task-name")
 
         dict = {
+            "dbt_yml_path": yml_path,
             "dag_json_dag_id": self.dag_id,
             "dag_json_schedule": self.dag_schedule,
-            "dbt_yml_path": yml_path,
-            "deps_bash_cmd": "{0}".format(task_cmmd),
-            "deps_names": "{0}".format(task_name)
+            "dict_json_bash": "{0}".format(self.bash_task),
+            "dict_json_flag": "{0}".format(self.flag_task)
         }
 
         return dict
