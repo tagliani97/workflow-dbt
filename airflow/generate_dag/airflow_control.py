@@ -1,5 +1,5 @@
-from utils.dag import Control
-from utils.conf_yaml import ConfigPath
+from config.configuration import ConfigPath
+from packages.airflow_dag import Control
 
 
 class Airflow:

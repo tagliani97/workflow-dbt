@@ -1,13 +1,13 @@
 {
-    "dag-id": "tru-teste-template",
+    "dag-id": "dag-new",
     "dag-schedule": "@daily",
     "template-name": "tru-template",
     "edit-template": false,
+    "flag-task":{
+        "task-flag": "dag-teste"
+    },
     "bash-task":{
         "task-dbt-1": "echo teste"
         ,"task-dbt-2": "echo opa"
-    },
-    "flag-task":{
-        "busca-stage_produto": "stage-produto"
     }
 }

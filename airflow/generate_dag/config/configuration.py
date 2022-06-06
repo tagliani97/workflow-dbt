@@ -6,7 +6,7 @@ from yaml.loader import SafeLoader
 
 class ConfigPath:
 
-    config_filepath = 'assets/config.yml'
+    config_filepath = 'utils/config.yml'
 
     @classmethod
     def configuration_files(cls) -> dict:

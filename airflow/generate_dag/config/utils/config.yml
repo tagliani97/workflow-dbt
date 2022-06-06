@@ -1,6 +1,6 @@
 airflow_dag_path: '/airflow/dags'
-config_dag: '/airflow/artifacts/config_json/'
-template_path: '/airflow/artifacts/template/'
+config_dag: '/airflow/config_json/'
+template_path: '/airflow/generate_dag/template/'
 dbt_path: '/dbt'
 
 repositorio: '/opt/airflow/dags/rd-da-dw-dbt-etl'

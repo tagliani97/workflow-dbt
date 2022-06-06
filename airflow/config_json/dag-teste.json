@@ -1,5 +1,5 @@
 {
-    "dag-id": "stage-teste-template",
+    "dag-id": "dag-teste",
     "dag-schedule": "@daily",
     "template-name": "stage-template",
     "edit-template": false,
