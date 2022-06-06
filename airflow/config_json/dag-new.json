@@ -1,12 +1,13 @@
 {
     "dag-id": "dag-new",
     "dag-schedule": "@daily",
+    "dag-tag": [""],
     "template-name": "tru-template",
     "edit-template": false,
     "flag-task":{
         "task-flag": "dag-teste"
         , "task-flag1": "dag-teste"
-        , "task-flag2": "dag-teste"
+        , "task-flag4": "dag-teste"
     },
     "bash-task":{
         "task-dbt-1": "echo teste"

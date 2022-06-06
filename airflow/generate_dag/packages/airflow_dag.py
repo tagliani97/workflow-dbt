@@ -1,6 +1,7 @@
 import shutil
 import fileinput
 import os
+import sys
 
 
 class Control:
@@ -14,6 +15,44 @@ class Control:
         self.template_name = kwargs.get("template-name")
         self.bash_task = kwargs.get("bash-task")
         self.flag_task = kwargs.get("flag-task")
+
+    @property
+    def flag_task(self):
+        return self._flag_task
+
+    @flag_task.setter
+    def flag_task(self, value):
+        if 'tru' in self.kwargs.get("template-name"):
+            if 'flag-task' not in self.kwargs:
+                raise Exception("Flag-task não existente")
+            else:
+                value = self.kwargs.get("flag-task")
+        self._flag_task = value
+
+    @property
+    def bash_task(self):
+        return self._bash_task
+
+    @bash_task.setter
+    def bash_task(self, value):
+        if 'bash-task' not in self.kwargs:
+            raise Exception("Flag-task não existente")
+        else:
+            value = self.kwargs.get("bash-task")
+        self._bash_task = value
+
+    def validation(self):
+
+        params_required = [
+            "dag-id",
+            "dag-schedule",
+            "dag-tag",
+            "template-name",
+        ]
+        validate = [i for i in self.kwargs.keys() if i in params_required]
+        if len(validate) < len(params_required):
+            result = list(set(params_required) - set(validate))
+            raise Exception("Parametro obrigatório não especificado", result)
 
     def dict_control(self):
 

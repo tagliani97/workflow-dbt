@@ -1,6 +1,7 @@
 {
     "dag-id": "dag-teste",
     "dag-schedule": "@daily",
+    "dag-tag": [""],
     "template-name": "stage-template",
     "edit-template": false,
     "bash-task":{

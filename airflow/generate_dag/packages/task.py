@@ -4,6 +4,7 @@ from config.database import Database
 
 
 class Task:
+
     @staticmethod
     def status(context):
         print("Rodei", context)

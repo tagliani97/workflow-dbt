@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 
-class FlagControl():
+class FlagControl:
 
     def __init__(self, dag_id):
         self.dag_id = dag_id
