@@ -6,7 +6,7 @@ class Database():
     @staticmethod
     def postgress_conection():
         conn_args = dict(
-            host='172.18.0.4',
+            host='172.18.0.3',
             user='dbtuser',
             password='pssd',
             dbname='dbtdb',
@@ -17,7 +17,7 @@ class Database():
         return cur, conn
 
     @staticmethod
-    def postgres_query(*psd_arg, query):
+    def postgres_query(psd_arg, query):
 
         cur = psd_arg[0]
         conn = psd_arg[1]
