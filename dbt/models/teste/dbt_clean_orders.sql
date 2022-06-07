@@ -14,6 +14,7 @@ with initial_dates as (
     from {{ source('instacart_raw_data', 'orders') }}
 ),
 
+
 cumulative_dates as (
     select *
     , sum(days_since_prior_order_v2) over ( partition by user_id ORDER BY user_id asc, order_number ASC) as days_since_prior_order_cum

@@ -4,7 +4,7 @@ from airflow.utils.dates import days_ago
 
 sys.path.insert(0, '/airflow/generate_dag')
 
-from packages.generate import GenOperator
+from packages.task import Task
 
 with DAG(
         dag_id='dag_json_dag_id',
@@ -17,5 +17,5 @@ with DAG(
     bash_cmd = dict_json_bash
     python_cmd = dict_json_flag
 
-    GenOperator(dag.dag_id).execution_tru(bash_cmd, python_cmd)
+    Task(dag.dag_id, 'tru', bash_cmd, python_cmd).create_task()
 

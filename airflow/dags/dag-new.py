@@ -4,7 +4,7 @@ from airflow.utils.dates import days_ago
 
 sys.path.insert(0, '/airflow/generate_dag')
 
-from packages.generate import GenOperator
+from packages.task import Task
 
 with DAG(
         dag_id='dag-new',
@@ -17,5 +17,5 @@ with DAG(
     bash_cmd = {'task-dbt-1': 'echo teste', 'task-dbt-2': 'echo opa'}
     python_cmd = {'task-flag': 'dag-teste', 'task-flag1': 'dag-teste', 'task-flag4': 'dag-teste'}
 
-    GenOperator(dag.dag_id).execution_tru(bash_cmd, python_cmd)
+    Task(dag.dag_id, 'tru', bash_cmd, python_cmd).create_task()
 

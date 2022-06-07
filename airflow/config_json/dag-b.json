@@ -1,11 +1,13 @@
 {
-    "dag-id": "dag-teste",
+    "dag-id": "dag-b",
     "dag-schedule": "@daily",
     "dag-tag": ["teste-sql"],
-    "template-name": "stage-template",
+    "template-name": "tru-template",
     "edit-template": false,
+    "flag-task":{
+        "verifica-status-dag-teste": "dag-teste"
+    },
     "bash-task":{
         "task-dbt-1": "echo teste"
-        ,"task-dbt-2": "echo opa"
     }
 }
