@@ -7,17 +7,17 @@ sys.path.insert(0, '/airflow/generate_dag')
 from packages.task import Task
 
 with DAG(
-        dag_id='dag-b',
+        dag_id='dag-new',
         schedule_interval='@daily',
         start_date=days_ago(0),
-        tags=['test3'],
+        tags=['example'],
         catchup=False) as dag:
 
 
-    bash_cmd = {'task-dbt-1': 'echo teste'}
-    python_cmd = {'verifica-status-dag-teste': 'dag-new', 'verifica-status-dag-teste1': 'dag-new', 'verifica-status-dag-teste2': 'dag-new', 'verifica-status-dag-teste3': 'dag-new'}
+    bash_cmd = {'task-dbt-1': 'echo teste', 'task-dbt-2': 'echo teste', 'task-dbt-3': 'echo teste', 'task-dbt-4': 'echo teste', 'task-dbt-5': 'echo teste'}
+    python_cmd = None
 
-    Task(dag.dag_id, 'tru',
+    Task(dag.dag_id, 'stage',
                      bash_cmd,
                      python_cmd,
                      '',

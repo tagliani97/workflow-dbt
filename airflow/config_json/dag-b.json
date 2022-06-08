@@ -5,7 +5,10 @@
     "template-name": "tru-template",
     "edit-template": false,
     "flag-task":{
-        "verifica-status-dag-teste": "dag-teste"
+        "verifica-status-dag-teste": "dag-new",
+        "verifica-status-dag-teste1": "dag-new",
+        "verifica-status-dag-teste2": "dag-new",
+        "verifica-status-dag-teste3": "dag-new"
     },
     "bash-task":{
         "task-dbt-1": "echo teste"

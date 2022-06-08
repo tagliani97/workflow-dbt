@@ -11,7 +11,7 @@ class Gen:
             'python_operator': '''python_operator.PythonOperator(
                 task_id='task_paramater',
                 python_callable=FlagControl.postgres_query,
-                op_kwargs={'flag': "psd_query"})''',
+                op_kwargs={'query': "psd_query"})''',
 
             'bash_operator': '''BashOperator(
                 task_id="task_paramater",
@@ -26,12 +26,11 @@ class Gen:
             key: (
                 result.replace(
                     "task_cmmd",
-                    f'{self.docker_yml_cmd} "cd {self.dbt_yml_path} ; dbt deps ; {value} "')
+                    f"{value}")
+                    # f'{self.docker_yml_cmd} "cd {self.dbt_yml_path} ; dbt deps ; {value} "')
                 .replace('psd_query', query if query else '')
                 .replace('task_paramater', key))
             for key, value in dicts.items()
         }
-
-        print(task_depends)
 
         return task_depends

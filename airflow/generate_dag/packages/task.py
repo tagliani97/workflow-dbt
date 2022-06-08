@@ -11,7 +11,6 @@ class Auxiliar:
     @staticmethod
     def status(context):
         run = Observability(context)
-        data = run.send_log()
         dag_id = str(context['dag']).split()[1].replace('>', '')
         if 'failed' in str(context['task_instance']):
             query = FlagControl(dag_id).query_by_flag("failed")
@@ -70,7 +69,7 @@ class Task(FlagControl):
     def tru_list(self, template):
 
         bash_list = self.inter_eval(self.init_generator.operator('bash_operator', self.bsh_dict))
-        py_list = self.inter_eval(self.init_generator.operator('python_operator', self.py_dict, self.query_tru(template)))
+        py_list = self.inter_eval(self.init_generator.operator('python_operator', self.py_dict, self.query_by_flag(template)))
         first_task = self.auxiliar_task[0] >> py_list
         value = self.task_tree(bash_list, first_task)
         return value
@@ -81,4 +80,4 @@ class Task(FlagControl):
             return self.stage_list(self.template_type)
 
         if 'tru' in self.template_type:
-            return self.stage_list(self.template_type)
+            return self.tru_list(self.template_type)
