@@ -6,12 +6,13 @@ class FlagControl:
 
     def __init__(self, dag_id):
         self.dag_id = dag_id
-        self.psd_arg = Database.postgress_conection()
 
-    def postgres_query(self, query):
+    @staticmethod
+    def postgres_query(query):
 
-        cur = self.psd_arg[0]
-        conn = self.psd_arg[1]
+        psd_arg = Database.postgress_conection()
+        cur = psd_arg[0]
+        conn = psd_arg[1]
         try:
             cur.execute(query)
             conn.commit()

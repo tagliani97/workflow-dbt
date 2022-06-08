@@ -5,7 +5,16 @@ from flag import FlagControl
 from generate import Gen
 
 
-class AuxiliarOperator:
+class Auxiliar:
+
+    @staticmethod
+    def status(context):
+        dag_id = str(context['dag']).split()[1].replace('>', '')
+        if 'failed' in str(context['task_instance']):
+            query = FlagControl(dag_id).query_by_flag("failed")
+            FlagControl.postgres_query(query)
+            print('marquei no postgress')
+        return context
 
     @staticmethod
     def auxiliar_op():
@@ -13,14 +22,10 @@ class AuxiliarOperator:
         start = BashOperator(
             task_id="start",
             bash_command='echo comecei',
-            on_success_callback=Task.status,
-            on_failure_callback=Task.status
         )
         end = BashOperator(
             task_id="end",
             bash_command='echo finalizei',
-            on_success_callback=Task.status,
-            on_failure_callback=Task.status
         )
 
         return (start, end)
@@ -34,11 +39,7 @@ class Task(FlagControl):
         self.bsh_dict = bsh_dict
         self.py_dict = py_dict
         self.inter_eval = lambda x: [eval(v) for v in x.values()]
-        self.auxiliar_task = AuxiliarOperator.auxiliar_op()
-
-    @staticmethod
-    def status(context):
-        return 'rodei'
+        self.auxiliar_task = Auxiliar.auxiliar_op()
 
     def task_tree(self, bash_list, first_task=None):
         if first_task is None:
