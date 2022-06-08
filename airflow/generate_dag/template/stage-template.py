@@ -10,10 +10,15 @@ with DAG(
         dag_id='dag_json_dag_id',
         schedule_interval='dag_json_schedule',
         start_date=days_ago(0),
-        tags=['stage'],
+        tags=dag_json_dag_tag,
         catchup=False) as dag:
 
 
     bash_cmd = dict_json_bash
     python_cmd = dict_json_flag
-    Task(dag.dag_id, 'stage', bash_cmd, python_cmd).create_task()
+
+    Task(dag.dag_id, 'stage',
+                     bash_cmd,
+                     python_cmd,
+                     'docker_yml_cmd',
+                     'dbt_yml_path').create_task()

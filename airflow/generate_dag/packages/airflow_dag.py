@@ -1,7 +1,6 @@
 import shutil
 import fileinput
 import os
-import sys
 
 
 class Control:
@@ -11,14 +10,20 @@ class Control:
         self.kwargs = kwargs
         self.dag_id = kwargs.get("dag-id")
         self.dag_schedule = kwargs.get("dag-schedule")
+        self.dag_tag = kwargs.get("dag-tag")
         self.edit_template = kwargs.get("edit-template")
         self.template_name = kwargs.get("template-name")
+        self.dependence = kwargs.get("airflow-task")
         self.bash_task = kwargs.get("bash-task")
         self.flag_task = kwargs.get("flag-task")
 
     @property
     def flag_task(self):
         return self._flag_task
+
+    @property
+    def bash_task(self):
+        return self._bash_task
 
     @flag_task.setter
     def flag_task(self, value):
@@ -28,10 +33,6 @@ class Control:
             else:
                 value = self.kwargs.get("flag-task")
         self._flag_task = value
-
-    @property
-    def bash_task(self):
-        return self._bash_task
 
     @bash_task.setter
     def bash_task(self, value):
@@ -56,12 +57,15 @@ class Control:
 
     def dict_control(self):
 
-        yml_path = self.yml_conf['dbt_path']
+        docker_dbt_path = self.yml_conf['docker_dbt_path']
+        docker_cmmd = self.yml_conf['docker_command']
 
         dict = {
-            "dbt_yml_path": yml_path,
             "dag_json_dag_id": self.dag_id,
             "dag_json_schedule": self.dag_schedule,
+            "dag_json_dag_tag": "{0}".format(self.dag_tag),
+            "dbt_yml_path": docker_dbt_path,
+            "docker_yml_cmd": docker_cmmd,
             "dict_json_bash": "{0}".format(self.bash_task),
             "dict_json_flag": "{0}".format(self.flag_task)
         }
@@ -99,9 +103,8 @@ class Control:
     def delete_dag(self):
 
         docker_delete_cmd = self.yml_conf["docker_delete_command"]
-        path_dags_container = self.yml_conf["repositorio"]
-        path_logs = self.yml_conf["dags_logs"]
-
+        path_dags_container = self.yml_conf["docker_dags_path"]
+        path_logs = self.yml_conf["docker_dags_logs"]
         try:
             os.system(f'{docker_delete_cmd} \
                 "cd {path_dags_container} ; airflow dags delete -y \
@@ -112,4 +115,3 @@ class Control:
                 "cd {path_logs} ; rm -r {self.dag_id}/"')
         except Exception as e:
             print("Falha ao deletar a dag", e)
-

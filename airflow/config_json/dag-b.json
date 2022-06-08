@@ -1,7 +1,7 @@
 {
     "dag-id": "dag-b",
     "dag-schedule": "@daily",
-    "dag-tag": ["teste-sql"],
+    "dag-tag": ["test3"],
     "template-name": "tru-template",
     "edit-template": false,
     "flag-task":{
