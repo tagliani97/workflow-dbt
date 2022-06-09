@@ -26,9 +26,9 @@ class FlagControl:
         date = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')
 
         query_dict = {
-            'failed': f"""INSERT INTO flag_airflow.airflow_dag_status VALUES ('{self.dag_id}', ' failed', '{date}')""",
+            'failed': f"""INSERT INTO flag_airflow.airflow_dag_status VALUES ('{self.dag_id}', 'failed', '{date}')""",
             'stage': f"""INSERT INTO flag_airflow.airflow_dag_status VALUES ('{self.dag_id}','success', '{date}')""",
-            'tru': f"""SELECT dag_id, status, MAX(data_execution) FROM flag_airflow.airflow_dag_status WHERE 1=1 and dag_id = {self.dag_id} and status = 'success' and data_execution <= CURRENT_TIMESTAMP AT TIME ZONE 'UTC' GROUP BY dag_id, status;"""
+            'tru': f"""SELECT dag_id, status, MAX(data_execution) FROM flag_airflow.airflow_dag_status WHERE 1=1 and dag_id = '{self.dag_id}' and status = 'success' and data_execution <= CURRENT_TIMESTAMP AT TIME ZONE 'UTC' GROUP BY dag_id, status;"""
         }
 
         result = [v for k, v in query_dict.items() if template_type == k][0]
