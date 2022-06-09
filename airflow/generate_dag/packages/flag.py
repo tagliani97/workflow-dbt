@@ -17,9 +17,13 @@ class FlagControl:
             cur.execute(query)
             conn.commit()
             if 'INSERT' not in query:
-                cur.fetchall()
+                cur.execute(query)
+                conn.commit()
+                result = cur.fetchall()
+                if 'failed' in result[0]:
+                    raise Exception("Falha na ultima execucao")
         except Exception as e:
-            raise("Problema na execucao da query", e)
+            raise(e)
         cur.close()
         conn.close()
 
@@ -31,19 +35,16 @@ class FlagControl:
             'failed': f"""INSERT INTO flag_airflow.airflow_dag_status VALUES ('{self.dag_id}', 'failed', '{date}')""",
             'stage': f"""INSERT INTO flag_airflow.airflow_dag_status VALUES ('{self.dag_id}','success', '{date}')""",
             'tru': f"""
-                SELECT dag_id, status, MAX(data_execution) data_success\
-                FROM flag_airflow.airflow_dag_status\
-                WHERE 1=1\
-                and dag_id = '{self.dag_id}'\
-                and status = 'success'\
-                and data_execution > (\
-                    SELECT MAX(data_execution) data_failed\
+                with flag as (\
+                    SELECT dag_id, status, MAX(data_execution) data_ref\
                     FROM flag_airflow.airflow_dag_status\
                     WHERE 1=1\
-                    and dag_id = '{self.dag_id}'\
-                    and status = 'failed')\
-                and data_execution <= CURRENT_TIMESTAMP AT TIME ZONE 'UTC'\
-                GROUP BY dag_id, status;
+                    and dag_id = {self.dag_id}\
+                    and (status = 'success' or status = ' failed')\
+                    and data_execution <= CURRENT_TIMESTAMP AT TIME ZONE 'UTC'\
+                    group by dag_id, status\
+                )\
+                SELECT status FROM flag;
                 """
             }
 
