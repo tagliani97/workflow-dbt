@@ -16,8 +16,10 @@ class FlagControl:
         try:
             cur.execute(query)
             conn.commit()
+            if 'INSERT' not in query:
+                cur.fetchall()
         except Exception as e:
-            print("Problema na execucao da query", e)
+            raise("Problema na execucao da query", e)
         cur.close()
         conn.close()
 
@@ -28,8 +30,22 @@ class FlagControl:
         query_dict = {
             'failed': f"""INSERT INTO flag_airflow.airflow_dag_status VALUES ('{self.dag_id}', 'failed', '{date}')""",
             'stage': f"""INSERT INTO flag_airflow.airflow_dag_status VALUES ('{self.dag_id}','success', '{date}')""",
-            'tru': f"""SELECT dag_id, status, MAX(data_execution) FROM flag_airflow.airflow_dag_status WHERE 1=1 and dag_id = '{self.dag_id}' and status = 'success' and data_execution <= CURRENT_TIMESTAMP AT TIME ZONE 'UTC' GROUP BY dag_id, status;"""
-        }
+            'tru': f"""
+                SELECT dag_id, status, MAX(data_execution) data_success\
+                FROM flag_airflow.airflow_dag_status\
+                WHERE 1=1\
+                and dag_id = '{self.dag_id}'\
+                and status = 'success'\
+                and data_execution > (\
+                    SELECT MAX(data_execution) data_failed\
+                    FROM flag_airflow.airflow_dag_status\
+                    WHERE 1=1\
+                    and dag_id = '{self.dag_id}'\
+                    and status = 'failed')\
+                and data_execution <= CURRENT_TIMESTAMP AT TIME ZONE 'UTC'\
+                GROUP BY dag_id, status;
+                """
+            }
 
-        result = [v for k, v in query_dict.items() if template_type == k][0]
+        result = [str(v.strip()) for k, v in query_dict.items() if template_type == k][0]
         return result
