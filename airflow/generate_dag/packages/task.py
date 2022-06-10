@@ -13,7 +13,8 @@ class Auxiliar:
         run = Observability(context)
         dag_id = str(context['dag']).split()[1].replace('>', '')
         if 'failed' in str(context['task_instance']):
-            query = FlagControl(dag_id).query_by_flag("failed")
+            query = FlagControl.query_by_flag("failed")\
+                .replace('dag_by_param', dag_id)
             FlagControl.postgres_query(query)
             print('Flag failed postgres')
         return context
@@ -33,10 +34,10 @@ class Auxiliar:
         return (start, end)
 
 
-class Task(FlagControl):
+class Task:
 
     def __init__(self, dag_id, template_type, bsh_dict, py_dict, docker_yml_cmd, dbt_yml_path):
-        super().__init__(dag_id)
+        self.dag_id = dag_id
         self.template_type = template_type
         self.bsh_dict = bsh_dict
         self.py_dict = py_dict
@@ -61,7 +62,14 @@ class Task(FlagControl):
 
         python_dict = {'insert_data': self.dag_id}
         bash_list = self.inter_eval(self.init_generator.operator('bash_operator', self.bsh_dict))
-        py_list = self.inter_eval(self.init_generator.operator('python_operator', python_dict, self.query_by_flag(template)))
+        py_list = self.inter_eval(
+            self.init_generator.operator(
+                'python_operator',
+                python_dict,
+                self.dag_id,
+                FlagControl.query_by_flag(template)
+            )
+        )
         bash_list.append(py_list)
         value = self.task_tree(bash_list)
         return value
@@ -69,7 +77,14 @@ class Task(FlagControl):
     def tru_list(self, template):
 
         bash_list = self.inter_eval(self.init_generator.operator('bash_operator', self.bsh_dict))
-        py_list = self.inter_eval(self.init_generator.operator('python_operator', self.py_dict, self.query_by_flag(template)))
+        py_list = self.inter_eval(
+            self.init_generator.operator(
+                'python_operator',
+                self.py_dict,
+                'tru',
+                FlagControl.query_by_flag(template)
+            )
+        )
         first_task = self.auxiliar_task[0] >> py_list
         value = self.task_tree(bash_list, first_task)
         return value

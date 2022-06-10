@@ -15,7 +15,7 @@ with DAG(
 
 
     bash_cmd = {'task-dbt-1': 'echo teste'}
-    python_cmd = {'verifica-status-dag-teste': 'dag-new', 'verifica-status-dag-teste1': 'dag-new', 'verifica-status-dag-teste2': 'dag-new', 'verifica-status-dag-teste3': 'dag-new'}
+    python_cmd = {'verifica-status-dag-new': 'dag-new'}
 
     Task(dag.dag_id, 'tru',
                      bash_cmd,

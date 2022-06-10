@@ -14,7 +14,7 @@ with DAG(
         catchup=False) as dag:
 
 
-    bash_cmd = {'task-dbt-1': 'echo teste', 'task-dbt-2': 'echo teste', 'task-dbt-3': 'echo teste', 'task-dbt-4': 'echo teste', 'task-dbt-5': 'echo teste'}
+    bash_cmd = {'task-dbt-1': 'echo teste'}
     python_cmd = None
 
     Task(dag.dag_id, 'stage',

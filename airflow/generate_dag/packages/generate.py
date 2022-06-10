@@ -5,7 +5,7 @@ class Gen:
         self.docker_yml_cmd = docker_yml_cmd
         self.dbt_yml_path = dbt_yml_path
 
-    def operator(self, type_op, dicts, query=''):
+    def operator(self, type_op, dicts, dag_id='', query=''):
 
         operator_dict = {
             'python_operator': '''python_operator.PythonOperator(
@@ -29,6 +29,7 @@ class Gen:
                     f"{value}")
                     # f'{self.docker_yml_cmd} "cd {self.dbt_yml_path} ; dbt deps ; {value} "')
                 .replace('psd_query', query if query else '')
+                .replace('dag_by_param', value if 'tru' in dag_id else dag_id)
                 .replace('task_paramater', key))
             for key, value in dicts.items()
         }
