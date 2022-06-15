@@ -1,0 +1,10 @@
+{
+    "dag-id": "dag-new",
+    "dag-schedule": "@daily",
+    "dag-tag": ["example"],
+    "template-name": "stage-template",
+    "edit-template": false,
+    "bash-task":{
+        "task-dbt-1": "echo teste"
+    }
+}
