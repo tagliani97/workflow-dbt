@@ -1,8 +1,9 @@
 {
-    "dag-id": "dag-new",
+    "dag-id": "asd",
     "dag-schedule": "@daily",
     "dag-tag": ["example"],
     "template-name": "stage-template",
+    "table-dynamo" : "ddd",
     "edit-template": false,
     "bash-task":{
         "task-dbt-1": "echo teste"
