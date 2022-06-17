@@ -7,6 +7,8 @@ sys.path.insert(0, '/opt/generate_dag/core')
 
 from .models.generate import Gen
 from .models.operators import Operator
+from .models.utils import Auxiliar
+from .models.flag import FlagControl
 
 
 class Task:
@@ -25,6 +27,7 @@ class Task:
         self.py_dict = py_dict
         self.table_dynamo = table_dynamo
 
+        self.inter_eval = lambda x: [eval(v) for v in x.values()]
         self.operators = Operator.auxiliar_op()
         self.init_generator = Gen(
             docker_yml_cmd,
@@ -33,11 +36,11 @@ class Task:
 
     def task_tree(self, bash_list, first_task=None):
 
-        trigger_datalake = self.init_generator.generate(
+        trigger_datalake = self.inter_eval(self.init_generator.generate(
                 self.operators,
                 'trigger_datalake',
                 table=self.table_dynamo
-            )
+            ))
 
         if first_task is None:
             first_task = trigger_datalake

@@ -1,4 +1,4 @@
-from airflow..models..baseoperator import BaseOperator
+from airflow.models.baseoperator import BaseOperator
 import boto3
 import os
 from datetime import datetime

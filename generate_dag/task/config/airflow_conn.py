@@ -2,7 +2,7 @@ import psycopg2
 from airflow.hooks.base import BaseHook
 
 
-class Database():
+class Connection():
 
     @staticmethod
     def postgress_conection():

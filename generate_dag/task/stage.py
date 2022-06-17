@@ -28,20 +28,20 @@ class Stage(Task):
 
         python_dict = {'insert_data': self.dag_id}
 
-        bash_list = self.init_generator.generate(
+        bash_list = self.inter_eval(self.init_generator.generate(
                 self.operators,
                 'dbt_operator',
                 self.bsh_dict
-        )
+        ))
 
-        py_list = self.init_generator.generate(
+        py_list = self.inter_eval(self.init_generator.generate(
                 self.operators,
                 'flag_operator',
                 python_dict,
                 self.dag_id,
                 FlagControl.query_by_flag(template),
                 self.table_dynamo
-            )
+            ))
 
         bash_list.append(py_list)
         value = self.task_tree(bash_list)

@@ -38,13 +38,7 @@ class Tru(Task):
             )
         )
 
-        trigger_datalake = self.inter_eval(
-            self.init_generator.generate(
-                'trigger_datalake'
-            )
-        )
-
-        first_task = trigger_datalake >> py_list
+        first_task = py_list
         value = self.task_tree(bash_list, first_task)
         return value
 

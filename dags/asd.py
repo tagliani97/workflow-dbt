@@ -16,7 +16,7 @@ with DAG(
     bash_cmd = {'task-dbt-1': 'echo teste'}
     python_cmd = None
 
-    table_dynamo = 'asd-asdas'
+    table_dynamo = 'tb_crm_categoria'
     docker_cmd = 'docker exec -i  image_airflow_dbt_dbt-container_1 bash -c'
     dbt_path = ''
 

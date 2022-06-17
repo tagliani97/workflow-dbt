@@ -1,19 +1,19 @@
-from .models.flag import FlagControl
+from models.flag import FlagControl
 from datetime import datetime
+
+import sys
+import json
+sys.path.insert(0, "/opt/generate_dag/task")
+
+from services.dynamo import DynamoDB
 
 
 class Auxiliar:
 
     @staticmethod
     def get_start(table):
-        date = datetime.now().strftime('%Y-%m-%d')
-        result = DynamoDB().scan_table_all_pages('octagon-light-Metadata-dev')
-        for i in result:
-            if table in i["table"]:
-                if 'SUCCEEDED' not in i['status_process']:
-                    raise Exception(f"{table} não possui status de sucesso")
-                elif date not in i['timestamp_finished']:
-                    raise Exception(f"{table} não possui status para data atual")
+        print('table dynamodb ->', table)
+        DynamoDB().scan_table(table)
 
     @staticmethod
     def status(context):
