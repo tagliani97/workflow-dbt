@@ -1,5 +1,5 @@
-from task import Task
-from .models.flag import FlagControl
+from .models.flag import PostgresFlag
+from .task import Task
 
 
 class Tru(Task):
@@ -7,40 +7,41 @@ class Tru(Task):
     def __init__(
         self,
         dag_id,
-        bsh_dict,
-        py_dict,
+        dbt_dict,
+        flag_dict,
         table_dynamo,
         docker_yml_cmd,
         dbt_yml_path
     ):
         super().__init__(
-            dag_id,
-            bsh_dict,
-            py_dict,
             table_dynamo,
             docker_yml_cmd,
             dbt_yml_path,
         )
 
+        self.dag_id = dag_id
+        self.dbt_dict = dbt_dict
+        self.flag_dict = flag_dict
         self.template_type = 'tru'
 
-    def tru_list(self, template):
+    def create_tru_task(self):
 
-        bash_list = self.inter_eval(
-            self.init_generator.generate('dbt_operator', self.bsh_dict))
+        dbt_operator_list = self.find_task_output(self.init_generator.generate(
+            self.operators,
+            'dbt_operator',
+            self.dbt_dict
+        ))
 
-        py_list = self.inter_eval(
-            self.init_generator.operator(
+        flag_operator_list = self.find_task_output(
+            self.init_generator.generate(
+                self.operators,
                 'flag_operator',
-                self.py_dict,
+                self.flag_dict,
                 'tru',
-                FlagControl.query_by_flag(template)
+                PostgresFlag.type_postgres_query(self.template_type)
             )
         )
 
-        first_task = py_list
-        value = self.task_tree(bash_list, first_task)
+        first_task = flag_operator_list
+        value = self.create_task_tree(dbt_operator_list, first_task)
         return value
-
-    def create_task(self):
-        self.tru_list(self.template_type)

@@ -20,7 +20,7 @@ class Airflow:
                 init_control.delete_dag()
             else:
                 init_control.validation()
-                dict_replace = init_control.dict_control()
+                dict_replace = init_control.param_dict_control()
                 init_control.create_dag(dict_replace)
 
 

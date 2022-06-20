@@ -20,12 +20,11 @@ class Gen:
                 lambda operator, key, value: operator
                 .replace("task_paramater", key)
                 .replace("psd_query", query.strip().replace(
-                        "dag_by_param", 
+                        "dag_by_param",
                         value if "tru" in dag_id else dag_id
                     )
                 ),
-
-            "dbt_operator": 
+            "dbt_operator":
                 lambda operator, key, value: operator
                 .replace("task_paramater", key)
                 .replace(
@@ -33,8 +32,8 @@ class Gen:
                     value
                     # f'{self.docker_yml_cmd} "cd {self.dbt_yml_path} ; dbt deps ; {value} "'
                 ),
-            
-            "trigger_datalake": lambda operator: operator.replace("table_param", table)
+            "trigger_datalake":
+                lambda operator: operator.replace("table_param", table)
         }
         operator = [
             v for k, v in operators.items() if type_op == k
@@ -44,7 +43,6 @@ class Gen:
                 v(operator, key, value) 
                 for k, v in replace_dict.items() if k in type_op
             ][0]
-        
             task_depends = {
                 key: (operator_replace(key, value).strip())
                 for key, value in dicts.items()
@@ -55,6 +53,8 @@ class Gen:
                 for k, v in replace_dict.items() if k in type_op
             ][0]
             task_depends = {}
-            task_depends[type_op if type_op in replace_dict.keys() else ''] = operator_replace(operator)
+            task_depends[
+                type_op if type_op in replace_dict.keys() else ''
+            ] = operator_replace(operator)
 
         return task_depends

@@ -1,0 +1,13 @@
+{
+    "dag-id": "asd-tru",
+    "dag-schedule": "@daily",
+    "dag-tag": ["example"],
+    "template-name": "tru-template",
+    "edit-template": false,
+    "flag-task":{
+        "task-flag": "asd"
+    },
+    "bash-task":{
+        "task-dbt-1": "echo teste"
+    }
+}

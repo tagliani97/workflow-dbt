@@ -2,30 +2,30 @@
 class Operator:
 
     @staticmethod
-    def auxiliar_op():
+    def auxiliar_op() -> dict:
 
         operator_dict = {
 
             "trigger_datalake": """python_operator.PythonOperator(
                     task_id='datalake-status',
-                    python_callable=Auxiliar.get_start,
+                    python_callable=Auxiliar.collect_status_datalake,
                     op_kwargs={"table": "table_param"},
-                    on_success_callback=Auxiliar.status,
-                    on_failure_callback=Auxiliar.status)""",
+                    on_success_callback=Auxiliar.task_status,
+                    on_failure_callback=Auxiliar.task_status)""",
             
             "flag_operator": """python_operator.PythonOperator(
                 task_id='task_paramater',
-                python_callable=FlagControl.postgres_query,
+                python_callable=PostgresFlag.execute_postgres_query,
                 op_kwargs={"query": "psd_query"},
-                on_success_callback=Auxiliar.status,
-                on_failure_callback=Auxiliar.status)
+                on_success_callback=Auxiliar.task_status,
+                on_failure_callback=Auxiliar.task_status)
             """,
             
             "dbt_operator": """BashOperator(
                 task_id="task_paramater",
                 bash_command = "task_cmmd",
-                on_success_callback=Auxiliar.status,
-                on_failure_callback=Auxiliar.status)
+                on_success_callback=Auxiliar.task_status,
+                on_failure_callback=Auxiliar.task_status)
             """,
 
             "end": """BashOperator(

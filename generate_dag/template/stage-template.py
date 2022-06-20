@@ -14,13 +14,11 @@ with DAG(
         catchup=False) as dag:
 
     bash_cmd = dict_json_bash
-    python_cmd = dict_json_flag
 
     Stage(
         dag.dag_id,
         bash_cmd,
-        python_cmd,
+        'dag_json_tb_dynamo',
         'docker_yml_cmd',
-        'dbt_yml_path',
-        'dag_json_tb_dynamo'
-    ).create_task()
+        'dbt_yml_path'
+    ).create_stage_task()

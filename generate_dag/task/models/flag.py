@@ -5,14 +5,15 @@ sys.path.insert(0, "/opt/generate_dag/task")
 from config.airflow_conn import Connection
 
 
-class FlagControl:
+class PostgresFlag:
 
     @staticmethod
-    def postgres_query(query):
+    def execute_postgres_query(query: str) -> None:
 
         psd_arg = Connection.postgress_conection()
         cur = psd_arg[0]
         conn = psd_arg[1]
+        print([query])
         try:
             if "INSERT" not in str(query):
                 cur.execute(query)
@@ -30,7 +31,7 @@ class FlagControl:
             conn.close()
 
     @staticmethod
-    def query_by_flag(template_type):
+    def type_postgres_query(template_type: str) -> str:
 
         date = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
@@ -51,7 +52,7 @@ class FlagControl:
                     WHERE 1=1\
                     and dag_id = 'dag_by_param'\
                     and (status = 'success' or status = 'failed')\
-                    and data_execution <= CURRENT_TIMESTAMP AT TIME ZONE "UTC"\
+                    and data_execution <= CURRENT_TIMESTAMP AT TIME ZONE 'UTC'\
                     group by dag_id, status\
                 )\
                 SELECT status, data_ref FROM flag\

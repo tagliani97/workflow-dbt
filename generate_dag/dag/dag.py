@@ -2,7 +2,7 @@
 
 class Control:
 
-    def __init__(self, yml_conf, kwargs):
+    def __init__(self, yml_conf: dict, kwargs: dict):
         self.yml_conf = yml_conf
         self.kwargs = kwargs
         self.bash_task = None
@@ -17,7 +17,7 @@ class Control:
         return self._bash_task
 
     @flag_task.setter
-    def flag_task(self, value):
+    def flag_task(self, value: dict) -> dict:
         if 'tru' in self.kwargs.get("template-name"):
             if 'flag-task' not in self.kwargs:
                 raise Exception("Flag-task não existente")
@@ -26,14 +26,14 @@ class Control:
         self._flag_task = value
 
     @bash_task.setter
-    def bash_task(self, value):
+    def bash_task(self, value: dict) -> dict:
         if 'bash-task' not in self.kwargs:
             raise Exception("Flag-task não existente")
         else:
             value = self.kwargs.get("bash-task")
         self._bash_task = value
 
-    def validation(self):
+    def validation(self) -> None:
 
         params_required = [
             "dag-id",
@@ -46,7 +46,7 @@ class Control:
             result = list(set(params_required) - set(validate))
             raise Exception("Parametro obrigatório não especificado", result)
 
-    def dict_control(self):
+    def param_dict_control(self) -> dict:
 
         dict = {
             "dag_json_dag_id": self.kwargs.get("dag-id"),

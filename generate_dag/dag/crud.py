@@ -5,10 +5,10 @@ from .dag import Control
 
 
 class CrudDag(Control):
-    def __init__(self, yml_conf, kwargs):
+    def __init__(self, yml_conf: dict, kwargs: dict):
         super().__init__(yml_conf, kwargs)
 
-    def create_dag(self, dict_replace):
+    def create_dag(self, dict_replace: dict) -> None:
 
         airflow_dag_path = self.yml_conf['airflow_dag_path']
         template_path = self.yml_conf['template_path']

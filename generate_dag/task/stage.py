@@ -1,4 +1,4 @@
-from .models.flag import FlagControl
+from .models.flag import PostgresFlag
 from .task import Task
 
 
@@ -7,45 +7,41 @@ class Stage(Task):
     def __init__(
         self,
         dag_id,
-        bsh_dict,
-        py_dict,
+        dbt_dict,
         table_dynamo,
         docker_yml_cmd,
         dbt_yml_path
     ):
         super().__init__(
-            dag_id,
-            bsh_dict,
-            py_dict,
             table_dynamo,
             docker_yml_cmd,
             dbt_yml_path
         )
 
+        self.dag_id = dag_id
+        self.dbt_dict = dbt_dict
         self.template_type = 'stage'
 
-    def stage_list(self, template):
+    def create_stage_task(self) -> list:
 
-        python_dict = {'insert_data': self.dag_id}
+        flag_dict = {'insert_data': self.dag_id}
 
-        bash_list = self.inter_eval(self.init_generator.generate(
+        dbt_operator_list = self.find_task_output(self.init_generator.generate(
                 self.operators,
                 'dbt_operator',
-                self.bsh_dict
+                self.dbt_dict
         ))
 
-        py_list = self.inter_eval(self.init_generator.generate(
+        flag_operator_list = self.find_task_output(
+            self.init_generator.generate(
                 self.operators,
                 'flag_operator',
-                python_dict,
+                flag_dict,
                 self.dag_id,
-                FlagControl.query_by_flag(template),
+                PostgresFlag.type_postgres_query(self.template_type),
                 self.table_dynamo
             ))
 
-        bash_list.append(py_list)
-        value = self.task_tree(bash_list)
+        dbt_operator_list.append(flag_operator_list)
+        value = self.create_task_tree(dbt_operator_list)
         return value
-
-    def create_task(self):
-        return self.stage_list(self.template_type)
