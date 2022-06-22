@@ -15,10 +15,12 @@ with DAG(
 
     bash_cmd = {'task-dbt-1': 'echo teste'}
 
+    tb_dyn = ['tb_camp_oferta_pool', 'tb_dyn_sell_incidents']
+
     Stage(
         dag.dag_id,
         bash_cmd,
-        'ddd',
+        tb_dyn,
         'docker exec -i  image_airflow_dbt_dbt-container_1 bash -c',
         ''
     ).create_stage_task()

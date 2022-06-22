@@ -10,14 +10,14 @@ class Stage:
         self,
         dag_id,
         dbt_dict,
-        table_dynamo,
+        table_dynamo_list,
         docker_yml_cmd,
         dbt_yml_path
     ):
 
         self.dag_id = dag_id
         self.dbt_dict = dbt_dict
-        self.table_dynamo = table_dynamo
+        self.table_dynamo_list = table_dynamo_list
         self.docker_yml_cmd = docker_yml_cmd,
         self.dbt_yml_path = dbt_yml_path
         self.template_type = 'stage'
@@ -47,7 +47,7 @@ class Stage:
         triiger = []
         for k, v in self.operators.items():
             if k == 'trigger_datalake':
-                triiger.append(v(self.table_dynamo))
+                triiger.append(v(self.table_dynamo_list))
 
         flagl = []
 

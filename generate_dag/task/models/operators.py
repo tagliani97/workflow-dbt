@@ -16,7 +16,7 @@ class Operator:
             "trigger_datalake": lambda value: python_operator.PythonOperator(
                     task_id='datalake-status',
                     python_callable=Auxiliar.collect_status_datalake,
-                    op_kwargs={"table": value},
+                    op_kwargs={"table_dynamo_list": value},
                     on_success_callback=Auxiliar.task_status,
                     on_failure_callback=Auxiliar.task_status),
 

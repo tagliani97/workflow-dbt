@@ -15,10 +15,12 @@ with DAG(
 
     bash_cmd = dict_json_bash
 
+    tb_dyn = dag_json_tb_dynamo
+
     Stage(
         dag.dag_id,
         bash_cmd,
-        'dag_json_tb_dynamo',
+        tb_dyn,
         'docker_yml_cmd',
         'dbt_yml_path'
     ).create_stage_task()

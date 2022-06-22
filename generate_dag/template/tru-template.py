@@ -20,7 +20,6 @@ with DAG(
         dag.dag_id,
         bash_cmd,
         python_cmd,
-        'dag_json_tb_dynamo',
         'docker_yml_cmd',
         'dbt_yml_path'
     ).create_tru_task()
