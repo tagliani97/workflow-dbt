@@ -1,4 +1,11 @@
 
+from airflow.operators import python_operator
+from airflow.operators.bash_operator import BashOperator
+
+from flag import PostgresFlag
+from utils import Auxiliar
+
+
 class Operator:
 
     @staticmethod
@@ -6,32 +13,27 @@ class Operator:
 
         operator_dict = {
 
-            "trigger_datalake": """python_operator.PythonOperator(
+            "trigger_datalake": lambda value: python_operator.PythonOperator(
                     task_id='datalake-status',
                     python_callable=Auxiliar.collect_status_datalake,
-                    op_kwargs={"table": "table_param"},
+                    op_kwargs={"table": value},
                     on_success_callback=Auxiliar.task_status,
-                    on_failure_callback=Auxiliar.task_status)""",
-            
-            "flag_operator": """python_operator.PythonOperator(
-                task_id='task_paramater',
-                python_callable=PostgresFlag.execute_postgres_query,
-                op_kwargs={"query": "psd_query"},
-                on_success_callback=Auxiliar.task_status,
-                on_failure_callback=Auxiliar.task_status)
-            """,
-            
-            "dbt_operator": """BashOperator(
-                task_id="task_paramater",
-                bash_command = "task_cmmd",
-                on_success_callback=Auxiliar.task_status,
-                on_failure_callback=Auxiliar.task_status)
-            """,
+                    on_failure_callback=Auxiliar.task_status),
 
-            "end": """BashOperator(
-                task_id="end",
-                bash_command='echo finalizei')
-            """
+            "flag_operator": lambda key, value: python_operator.PythonOperator(
+                task_id=key,
+                python_callable=PostgresFlag.execute_postgres_query,
+                op_kwargs={"query": value},
+                on_success_callback=Auxiliar.task_status,
+                on_failure_callback=Auxiliar.task_status),
+
+            "dbt_operator": lambda key, value: BashOperator(
+                task_id=key,
+                bash_command=value,
+                on_success_callback=Auxiliar.task_status,
+                on_failure_callback=Auxiliar.task_status
+            ),
+
         }
 
         return operator_dict

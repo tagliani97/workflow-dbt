@@ -1,47 +1,56 @@
+from .models.operators import Operator
 from .models.flag import PostgresFlag
 from .task import Task
 
 
-class Tru(Task):
+class Tru:
 
     def __init__(
         self,
         dag_id,
         dbt_dict,
         flag_dict,
-        table_dynamo,
         docker_yml_cmd,
         dbt_yml_path
     ):
-        super().__init__(
-            table_dynamo,
-            docker_yml_cmd,
-            dbt_yml_path,
-        )
 
         self.dag_id = dag_id
         self.dbt_dict = dbt_dict
         self.flag_dict = flag_dict
+        self.docker_yml_cmd = docker_yml_cmd,
+        self.dbt_yml_path = dbt_yml_path
         self.template_type = 'tru'
+        self.operators = Operator.auxiliar_op()
 
     def create_tru_task(self):
 
-        dbt_operator_list = self.find_task_output(self.init_generator.generate(
-            self.operators,
-            'dbt_operator',
-            self.dbt_dict
-        ))
-
-        flag_operator_list = self.find_task_output(
-            self.init_generator.generate(
-                self.operators,
-                'flag_operator',
-                self.flag_dict,
-                'tru',
-                PostgresFlag.type_postgres_query(self.template_type)
-            )
+        query = lambda x : PostgresFlag.type_postgres_query(
+            self.template_type,
+            x
         )
 
-        first_task = flag_operator_list
-        value = self.create_task_tree(dbt_operator_list, first_task)
+        bashl = []
+        for k, v in self.operators.items():
+            if k == 'dbt_operator':
+                for j, l in self.dbt_dict.items():
+                    bashl.append(
+                        v(
+                            j,
+                            l
+                            # f'{self.docker_yml_cmd} "cd {self.dbt_yml_path} ; dbt deps ; {value} "'
+                        )
+                    )
+
+        flagl = []
+        for k, v in self.operators.items():
+            if k == 'flag_operator':
+                for j, l in self.flag_dict.items():
+                    flagl.append(
+                        v(
+                            j,
+                            query(l)
+                        )
+                    )
+
+        value = Task.create_task_tree(bashl, flagl)
         return value

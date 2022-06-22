@@ -31,7 +31,7 @@ class PostgresFlag:
             conn.close()
 
     @staticmethod
-    def type_postgres_query(template_type: str) -> str:
+    def type_postgres_query(template_type: str, dag_id) -> str:
 
         date = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
@@ -41,16 +41,16 @@ class PostgresFlag:
         query_dict = {
             "failed": f"""\
                 INSERT INTO {postgres_sch}.{postgres_table}\
-                    VALUES ('dag_by_param' , 'failed', '{date}')""",
+                    VALUES ('{dag_id}' , 'failed', '{date}')""",
             "stage": f"""\
                 INSERT INTO {postgres_sch}.{postgres_table}\
-                    VALUES ('dag_by_param','success', '{date}')""",
+                    VALUES ('{dag_id}','success', '{date}')""",
             "tru": f"""\
                 with flag as (\
                     SELECT dag_id, status, MAX(data_execution) data_ref\
                     FROM {postgres_sch}.{postgres_table}\
                     WHERE 1=1\
-                    and dag_id = 'dag_by_param'\
+                    and dag_id = '{dag_id}'\
                     and (status = 'success' or status = 'failed')\
                     and data_execution <= CURRENT_TIMESTAMP AT TIME ZONE 'UTC'\
                     group by dag_id, status\

@@ -20,7 +20,6 @@ with DAG(
         dag.dag_id,
         bash_cmd,
         python_cmd,
-        'None',
         'docker exec -i  image_airflow_dbt_dbt-container_1 bash -c',
         ''
     ).create_tru_task()
