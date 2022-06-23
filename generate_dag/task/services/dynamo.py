@@ -8,11 +8,16 @@ class DynamoDB:
 
     def __init__(self):
         self.client = InitService.type_service_boto3('dynamodb', "resource")
+        self.ssm = InitService.type_service_boto3("ssm", "client")
+        self.env = self.ssm.get_parameter(
+            Name="/config/data-environment",
+            WithDecryption=False
+        )
 
     def table_scan_list(self, table_dynamo_list) -> None:
 
         attr_name = 'table'
-        table = 'octagon-light-Metadata-dev'
+        table = f'octagon-light-Metadata-{self.env}'
         tabledb = self.client.Table(table)
 
         convert_to_data = lambda x : datetime.strptime(x, "%Y-%m-%d %H:%M:%S:%f")
@@ -30,25 +35,36 @@ class DynamoDB:
             )
 
             try:
+                if not len(response["Items"]):
+                    raise Exception(
+                        f"Tabela informada não existe {table_dynamo}"
+                    )
+
                 for i in response["Items"]:
                     index_status += 1
                     if "SUCCEEDED" in i['status_job'] or "FAILED" in i['status_job']:
                         data[
-                            i['status_job'], index_status
-                        ] = convert_to_data(i["timestamp_finished"])
+                            i['status_job'],
+                            index_status] = convert_to_data(
+                                i["timestamp_finished"]
+                            )
 
-                job_time = max(data.values())
-                max_value = [max(data, key=data.get), job_time]
-                day_result = convert_data_to_str(subtract_day(job_time))
-                date_now = convert_data_to_str(subtract_day(datetime.now()))
+                    job_time = max(data.values())
+                    max_value = [max(data, key=data.get), job_time]
+                    day_result = convert_data_to_str(subtract_day(job_time))
+                    date_now = convert_data_to_str(
+                            subtract_day(
+                                datetime.now()
+                            )
+                        )
 
-                assert ("SUCCEEDED" not in max_value),\
-                    "Não há registros de sucesso tabela {0}"\
-                    .format(table_dynamo)
+                    assert ("SUCCEEDED" not in max_value),\
+                        "Não há registros de sucesso tabela {0} \
+                        em seu ultimo processamento".format(table_dynamo)
 
-                assert (date_now not in day_result),\
-                    "Não há registros da {0} na data atual {1}"\
-                    .format(table_dynamo, date_now)
+                    assert (date_now not in day_result),\
+                        "Não há registros da {0} na data atual {1}"\
+                        .format(table_dynamo, date_now)
 
                 print(table_dynamo, "-> OK")
 
@@ -59,5 +75,6 @@ class DynamoDB:
 
             finally:
                 time.sleep(3)
+
 
         return "Sucesso"

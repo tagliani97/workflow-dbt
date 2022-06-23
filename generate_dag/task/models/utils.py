@@ -13,7 +13,6 @@ class Auxiliar:
     @staticmethod
     def collect_status_datalake(table_dynamo_list) -> None:
         print('table dynamodb list ->', table_dynamo_list)
-        DynamoDB().scan_table(table_dynamo_list)
 
     @staticmethod
     def task_status(context: dict) -> dict:
