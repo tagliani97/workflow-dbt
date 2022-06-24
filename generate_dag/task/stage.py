@@ -1,7 +1,7 @@
 
-from .models.operators import Operator
-from .models.flag import PostgresFlag
-from .task import Task
+from .operators import Operator
+from .flag import PostgresFlag
+from .models.task import Task
 
 
 class Stage:

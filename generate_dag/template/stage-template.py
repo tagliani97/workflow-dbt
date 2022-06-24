@@ -2,6 +2,7 @@ import sys
 from airflow import DAG
 from airflow.utils.dates import days_ago
 
+
 sys.path.insert(0, '/opt/generate_dag')
 
 from task.stage import Stage
@@ -16,7 +17,7 @@ with DAG(
 
     bash_cmd = dict_json_bash
     datalake_table_status = dag_json_tb_status_list
-    docker_exec = docker_yml_cmd
+    docker_exec = ["docker_yml_cmd"]
     docker_dbt_path = "dbt_yml_path"
 
     Stage(

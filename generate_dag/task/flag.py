@@ -1,8 +1,5 @@
 from datetime import datetime, timezone
-import sys
-
-sys.path.insert(0, "/opt/generate_dag/task")
-from config.airflow_conn import Connection
+from .config import Connection
 
 
 class PostgresFlag:

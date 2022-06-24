@@ -1,18 +1,7 @@
-from models.flag import PostgresFlag
-from datetime import datetime
-
-import sys
-import json
-sys.path.insert(0, "/opt/generate_dag/task")
-
-from services.dynamo import DynamoDB
+from .flag import PostgresFlag
 
 
 class Auxiliar:
-
-    @staticmethod
-    def collect_status_datalake(table_dynamo_list) -> None:
-        print('table dynamodb list ->', table_dynamo_list)
 
     @staticmethod
     def task_status(context: dict) -> dict:
