@@ -60,7 +60,9 @@ class CloudWatchLogs():
                 while size_logs is None or not size_logs:
                     reductor += 1
                     if reductor == 60:
-                        raise Exception("Tempo limite de busca tabela", table)
+                        raise Exception(
+                            f"Tempo limite de {reductor} dias excedido {table}"
+                        )
                     size_logs = self.query_logs(query, log_group, reductor)
 
                 max_time = max([logs[0]['value'] for logs in size_logs])
@@ -79,9 +81,10 @@ class CloudWatchLogs():
                 if 'FAILED' in dict_dataset['status_job']:
                     print(table, "-> FAIL")
                     raise Exception("""Ultimo status possui erro,
-                                     motivo""", dict_dataset['error'])
+                                    motivo""", dict_dataset['error'])
 
                 print(table, "-> OK")
                 time.sleep(3)
             except Exception as e:
                 raise e
+

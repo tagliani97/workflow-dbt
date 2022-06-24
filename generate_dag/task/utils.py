@@ -1,4 +1,4 @@
-from .flag import PostgresFlag
+from flag import PostgresFlag
 
 
 class Auxiliar:

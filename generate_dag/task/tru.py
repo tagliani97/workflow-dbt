@@ -1,6 +1,6 @@
-from .operators import Operator
-from .flag import PostgresFlag
-from .task import Task
+from operators import Operator
+from flag import PostgresFlag
+from task import Task
 
 
 class Tru:
@@ -36,7 +36,7 @@ class Tru:
                     bashl.append(
                         v(
                             j,
-                            "{0} 'cd {1} ; dbt deps ; {2}".format(
+                            "{0} 'cd {1} ; dbt deps ; {2} '".format(
                                 self.docker_yml_cmd[0], self.dbt_yml_path, l)
                             )
                         )

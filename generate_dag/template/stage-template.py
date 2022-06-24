@@ -17,7 +17,7 @@ with DAG(
 
     bash_cmd = dict_json_bash
     datalake_table_status = dag_json_tb_status_list
-    docker_exec = ["docker_yml_cmd"]
+    docker_exec = "docker_yml_cmd"
     docker_dbt_path = "dbt_yml_path"
 
     Stage(

@@ -4,8 +4,10 @@ import boto3
 
 class InitService:
 
-    #credentials
-    AWS_ACCOUNT_REGION="us-east-1"
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_SESSION_TOKEN = os.getenv('AWS_SESSION_TOKEN')
+    AWS_ACCOUNT_REGION = "us-east-1"
 
     @classmethod
     def type_service_boto3(cls, service: str, type_boto3: str) -> str:

@@ -17,7 +17,10 @@ class DynamoDB:
     def table_scan_list(self, table_dynamo_list) -> None:
 
         attr_name = 'table'
-        table = f'octagon-light-Metadata-{self.env}'
+        table = "octagon-light-Metadata-{}".format(
+            self.env['Parameter']['Value']
+        )
+
         tabledb = self.client.Table(table)
 
         convert_to_data = lambda x : datetime.strptime(x, "%Y-%m-%d %H:%M:%S:%f")
@@ -26,6 +29,7 @@ class DynamoDB:
 
         data = {}
         index_status = 0
+        print(len(table_dynamo_list))
         for table_dynamo in table_dynamo_list:
 
             response = tabledb.scan(
@@ -75,6 +79,3 @@ class DynamoDB:
 
             finally:
                 time.sleep(3)
-
-
-        return "Sucesso"
