@@ -15,11 +15,13 @@ with DAG(
 
     bash_cmd = {'task-dbt-1': 'echo teste'}
     python_cmd = {'task-flag': 'asd'}
+    docker_exec = ['docker exec -i  image_airflow_dbt_dbt-container_1 bash -c']
+    docker_dbt_path = ""
 
     Tru(
         dag.dag_id,
         bash_cmd,
         python_cmd,
-        'docker exec -i  image_airflow_dbt_dbt-container_1 bash -c',
-        ''
+        docker_exec,
+        docker_dbt_path
     ).create_tru_task()

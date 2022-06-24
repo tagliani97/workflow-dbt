@@ -52,7 +52,9 @@ class Control:
             "dag_json_dag_id": self.kwargs.get("dag-id"),
             "dag_json_schedule": self.kwargs.get("dag-schedule"),
             "dbt_yml_path": self.yml_conf['docker_dbt_path'],
-            "docker_yml_cmd": self.yml_conf['docker_command'],
+            "docker_yml_cmd": "{0}".format(
+                self.yml_conf['docker_command']
+            ),
             "dag_json_dag_tag": "{0}".format(self.kwargs.get("dag-tag")),
             "dict_json_bash": "{0}".format(self.bash_task),
             "dict_json_flag": "{0}".format(self.flag_task),

@@ -13,16 +13,16 @@ with DAG(
         tags=['example'],
         catchup=False) as dag:
 
+
     bash_cmd = {'task-dbt-1': 'echo teste'}
-
-    tb_dyn = ['tb_camp_oferta_pool', 'tb_dyn_sell_incidents']
-
-    teste = str("docker exec -i  image_airflow_dbt_dbt-container_1 bash -c")
+    datalake_table_status = ['tb-tb_dyn_sell_rd_assunto_nivel2s', 'tb_campanha_oferta']
+    docker_exec = ['docker exec -i  image_airflow_dbt_dbt-container_1 bash -c']
+    docker_dbt_path = ""
 
     Stage(
         dag.dag_id,
         bash_cmd,
-        tb_dyn,
-        teste,
-        ''
+        datalake_table_status,
+        docker_exec,
+        docker_dbt_path
     ).create_stage_task()

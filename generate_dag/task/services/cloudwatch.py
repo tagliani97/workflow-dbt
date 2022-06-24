@@ -59,7 +59,7 @@ class CloudWatchLogs():
 
                 while size_logs is None or not size_logs:
                     reductor += 1
-                    if reductor == 100:
+                    if reductor == 60:
                         raise Exception("Tempo limite de busca tabela", table)
                     size_logs = self.query_logs(query, log_group, reductor)
 
@@ -82,8 +82,6 @@ class CloudWatchLogs():
                                      motivo""", dict_dataset['error'])
 
                 print(table, "-> OK")
-
+                time.sleep(3)
             except Exception as e:
                 raise e
-            finally:
-                time.sleep(3)
