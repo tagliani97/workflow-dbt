@@ -2,6 +2,7 @@
 from airflow.operators import python_operator
 from airflow.operators.bash_operator import BashOperator
 
+from ..services.cloudwatch import CloudWatchLogs
 from flag import PostgresFlag
 from utils import Auxiliar
 
@@ -15,8 +16,8 @@ class Operator:
 
             "trigger_datalake": lambda value: python_operator.PythonOperator(
                     task_id='datalake-status',
-                    python_callable=Auxiliar.collect_status_datalake,
-                    op_kwargs={"table_dynamo_list": value},
+                    python_callable=CloudWatchLogs().control_query_logs,
+                    op_kwargs={"table_scan_list": value},
                     on_success_callback=Auxiliar.task_status,
                     on_failure_callback=Auxiliar.task_status),
 

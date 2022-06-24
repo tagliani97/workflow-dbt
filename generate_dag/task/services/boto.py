@@ -4,6 +4,8 @@ import boto3
 
 class InitService:
 
+    #credentials
+    AWS_ACCOUNT_REGION="us-east-1"
 
     @classmethod
     def type_service_boto3(cls, service: str, type_boto3: str) -> str:

@@ -56,8 +56,8 @@ class Control:
             "dag_json_dag_tag": "{0}".format(self.kwargs.get("dag-tag")),
             "dict_json_bash": "{0}".format(self.bash_task),
             "dict_json_flag": "{0}".format(self.flag_task),
-            "dag_json_tb_dynamo": "{0}".format(
-                self.kwargs.get("table-dynamo")
+            "dag_json_tb_status_list": "{0}".format(
+                self.kwargs.get("table-status")
             )
         }
 

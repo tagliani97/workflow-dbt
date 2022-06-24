@@ -13,14 +13,16 @@ with DAG(
         tags=dag_json_dag_tag,
         catchup=False) as dag:
 
-    bash_cmd = dict_json_bash
 
-    tb_dyn = dag_json_tb_dynamo
+    bash_cmd = dict_json_bash
+    datalake_table_status = dag_json_tb_status_list
+    docker_exec = docker_yml_cmd
+    docker_dbt_path = "dbt_yml_path"
 
     Stage(
         dag.dag_id,
         bash_cmd,
-        tb_dyn,
-        'docker_yml_cmd',
-        'dbt_yml_path'
+        datalake_table_status,
+        docker_exec,
+        docker_dbt_path
     ).create_stage_task()

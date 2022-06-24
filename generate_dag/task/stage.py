@@ -39,10 +39,10 @@ class Stage:
                     bashl.append(
                         v(
                             j,
-                            l
-                            # f'{self.docker_yml_cmd} "cd {self.dbt_yml_path} ; dbt deps ; {l} "'
+                            "{0} 'cd {1} ; dbt deps ; {2}".format(
+                                self.docker_yml_cmd[0], self.dbt_yml_path, l)
+                            )
                         )
-                    )
 
         triiger = []
         for k, v in self.operators.items():

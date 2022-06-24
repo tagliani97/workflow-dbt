@@ -3,7 +3,7 @@
     "dag-schedule": "@daily",
     "dag-tag": ["example"],
     "template-name": "stage-template",
-    "table-dynamo": ["tb-tb_dyn_sell_rd_assunto_nivel2s", "tb_campanha_oferta"],
+    "table-status": ["tb-tb_dyn_sell_rd_assunto_nivel2s", "tb_campanha_oferta"],
     "edit-template": false,
     "bash-task":{
         "task-dbt-1": "echo teste"

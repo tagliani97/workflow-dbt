@@ -17,10 +17,12 @@ with DAG(
 
     tb_dyn = ['tb_camp_oferta_pool', 'tb_dyn_sell_incidents']
 
+    teste = str("docker exec -i  image_airflow_dbt_dbt-container_1 bash -c")
+
     Stage(
         dag.dag_id,
         bash_cmd,
         tb_dyn,
-        'docker exec -i  image_airflow_dbt_dbt-container_1 bash -c',
+        teste,
         ''
     ).create_stage_task()

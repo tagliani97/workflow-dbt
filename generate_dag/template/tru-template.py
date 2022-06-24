@@ -15,11 +15,13 @@ with DAG(
 
     bash_cmd = dict_json_bash
     python_cmd = dict_json_flag
+    docker_exec = docker_yml_cmd
+    docker_dbt_path = "dbt_yml_path"
 
     Tru(
         dag.dag_id,
         bash_cmd,
         python_cmd,
-        'docker_yml_cmd',
-        'dbt_yml_path'
+        docker_exec,
+        docker_dbt_path
     ).create_tru_task()
