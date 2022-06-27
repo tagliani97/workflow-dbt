@@ -20,9 +20,9 @@ with DAG(
     docker_dbt_path = ""
 
     Stage(
-        dag.dag_id,
         bash_cmd,
-        datalake_table_status,
         docker_exec,
-        docker_dbt_path
+        docker_dbt_path,
+        dag.dag_id,
+        datalake_table_status
     ).create_stage_task()

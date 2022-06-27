@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from config import Connection
+from ..config import Connection
 
 
 class PostgresFlag:

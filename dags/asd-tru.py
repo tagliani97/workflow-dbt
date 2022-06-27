@@ -19,9 +19,8 @@ with DAG(
     docker_dbt_path = ""
 
     Tru(
-        dag.dag_id,
         bash_cmd,
-        python_cmd,
         docker_exec,
-        docker_dbt_path
+        docker_dbt_path,
+        python_cmd
     ).create_tru_task()

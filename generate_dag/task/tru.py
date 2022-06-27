@@ -1,56 +1,29 @@
-from operators import Operator
-from flag import PostgresFlag
-from task import Task
+from .models.task import Task
 
 
-class Tru:
+class Tru(Task):
 
     def __init__(
         self,
-        dag_id,
         dbt_dict,
-        flag_dict,
         docker_yml_cmd,
-        dbt_yml_path
+        dbt_yml_path,
+        flag_dict
     ):
-
-        self.dag_id = dag_id
-        self.dbt_dict = dbt_dict
+        super().__init__(dbt_dict, docker_yml_cmd, dbt_yml_path)
         self.flag_dict = flag_dict
-        self.docker_yml_cmd = docker_yml_cmd,
-        self.dbt_yml_path = dbt_yml_path
         self.template_type = 'tru'
-        self.operators = Operator.auxiliar_op()
 
     def create_tru_task(self):
 
-        query = lambda x : PostgresFlag.type_postgres_query(
-            self.template_type,
-            x
-        )
+        flag_task = [
+            v(
+                j, self.postgres_query_id(self.template_type, l)
+            ) for j, l in self.flag_dict.items()
+            for k, v in self.operators.items()
+            if k == 'flag_operator'
+        ]
 
-        bashl = []
-        for k, v in self.operators.items():
-            if k == 'dbt_operator':
-                for j, l in self.dbt_dict.items():
-                    bashl.append(
-                        v(
-                            j,
-                            "{0} 'cd {1} ; dbt deps ; {2} '".format(
-                                self.docker_yml_cmd[0], self.dbt_yml_path, l)
-                            )
-                        )
-
-        flagl = []
-        for k, v in self.operators.items():
-            if k == 'flag_operator':
-                for j, l in self.flag_dict.items():
-                    flagl.append(
-                        v(
-                            j,
-                            query(l)
-                        )
-                    )
-
-        value = Task.create_task_tree(bashl, flagl)
+        dbt_task = self.create_dbt_task()
+        value = self.create_task_tree(dbt_task, flag_task)
         return value
