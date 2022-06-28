@@ -1,0 +1,13 @@
+FROM amazonlinux
+
+RUN yum update -y && \
+  yum install -y python3 git aws-cli
+
+RUN pip3 install dbt-redshift==1.1.0
+
+RUN mkdir /home/airflow \
+    && mkdir /home/airflow/dbt \
+    && mkdir /home/airflow/dbt/.secrets
+
+COPY dbt/profiles.yml /home/airflow/dbt/.secrets/
+
