@@ -1,6 +1,5 @@
 logs
 db-data/
 __pycache__/
-.vscode/configurationCache.log
-.vscode/targets.log
+.vscode/
 .gitignore

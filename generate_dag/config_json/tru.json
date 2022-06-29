@@ -4,8 +4,8 @@
     "dag-tag": ["example"],
     "template-name": "tru-template",
     "edit-template": false,
-    "flag-task":{
-        "task-flag": "asd"
+    "flag-task": {
+        "verifica_nf_trusted": "dag_nf_trusted"
     },
     "bash-task":{
         "task-dbt-1": "echo teste"

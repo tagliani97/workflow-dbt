@@ -1,10 +1,9 @@
 {
-    "dag-id": "asd",
+    "dag-id": "bb",
     "dag-schedule": "@daily",
     "dag-tag": ["example"],
     "template-name": "stage-template",
-    "table-status": ["tb_dyn_sell_rd_assunto_nivel2s", "tb_campanha_oferta"],
-    "edit-template": false,
+    "table-status": [],
     "bash-task":{
         "task-dbt-1": "echo teste"
     }

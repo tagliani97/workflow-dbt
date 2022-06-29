@@ -48,10 +48,9 @@ class Control:
             if i in filter_false_list_dict_param
         ]
 
-        if len(validate_str):
-            print("Há parametros não preenchidos", validate_str)
-        if len(filter_required('stage')) or len(filter_required('tru')):
-            print('Parametros com lista vazia', filter_false_list_dict_param)
+        filter_requireds = len(filter_required('stage')) or len(filter_required('tru'))
+
+        return validate_str, filter_requireds
 
     def param_dict_control(self) -> dict:
 
