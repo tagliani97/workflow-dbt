@@ -1,0 +1,12 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/user/git/workflow-dbt'
+sudo mkdir -p logs
+sudo mkdir -p dags
+sudo mkdir -p dbt
+sudo mkdir -p pluguins
+sudo cp profiles.yml dbt/
+sudo chmod -R 777 logs/ dags/ dbt/ pluguins/ generate_dag/
+sudo docker build . -f Dockerfile --tag airflow_dbt:0.0.1
+sudo docker build . -f Dockerfile-dbt --tag dbt_rd:0.0.1
+make: Leaving directory '/home/user/git/workflow-dbt'
+ 
