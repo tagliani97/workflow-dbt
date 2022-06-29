@@ -14,7 +14,7 @@ with DAG(
         catchup=False) as dag:
 
 
-    bash_cmd = {'task-dbt-1': 'echo teste'}
+    bash_cmd = None
     datalake_table_status = ['tb-tb_dyn_sell_rd_assunto_nivel2s', 'tb_campanha_oferta']
     docker_exec = "['docker exec -i  image_airflow_dbt_dbt-container_1 bash -c']"
     docker_dbt_path = ""

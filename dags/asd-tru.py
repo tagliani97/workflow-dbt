@@ -13,8 +13,8 @@ with DAG(
         tags=['example'],
         catchup=False) as dag:
 
-    bash_cmd = {'task-dbt-1': 'echo teste'}
-    python_cmd = {'task-flag': 'asd'}
+    bash_cmd = None
+    python_cmd = None
     docker_exec = "['docker exec -i  image_airflow_dbt_dbt-container_1 bash -c']"
     docker_dbt_path = ""
 

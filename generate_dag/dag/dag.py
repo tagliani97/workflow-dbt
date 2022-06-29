@@ -8,43 +8,50 @@ class Control:
         self.bash_task = None
         self.flag_task = None
 
-    @property
-    def flag_task(self):
-        return self._flag_task
-
-    @property
-    def bash_task(self):
-        return self._bash_task
-
-    @flag_task.setter
-    def flag_task(self, value: dict) -> dict:
-        if 'tru' in self.kwargs.get("template-name"):
-            if 'flag-task' not in self.kwargs:
-                raise Exception("Flag-task não existente")
-            else:
-                value = self.kwargs.get("flag-task")
-        self._flag_task = value
-
-    @bash_task.setter
-    def bash_task(self, value: dict) -> dict:
-        if 'bash-task' not in self.kwargs:
-            raise Exception("Flag-task não existente")
-        else:
-            value = self.kwargs.get("bash-task")
-        self._bash_task = value
-
     def validation(self) -> None:
 
-        params_required = [
-            "dag-id",
-            "dag-schedule",
-            "dag-tag",
-            "template-name"
-        ]
+        dict_validation_template = {
+            "params_required": [
+                "dag-id",
+                "dag-schedule",
+                "dag-tag",
+                "template-name",
+                "bash-task"
+            ],
+            "stage": ["table-status"],
+            "tru": ["flag-task"]
+        }
+
+        params_required = dict_validation_template['params_required']
         validate = [i for i in self.kwargs.keys() if i in params_required]
         if len(validate) < len(params_required):
             result = list(set(params_required) - set(validate))
             raise Exception("Parametro obrigatório não especificado", result)
+
+        validate_str = tuple(filter(
+            lambda x: x[0] if x[1] is None or x[1] == '' else '', [
+                [k, v] for k, v in self.kwargs.items()]
+            ))
+        get_list_dict_param = [
+            [k, v] for k, v in self.kwargs.items()
+            if 'list' in str(type(v)) or 'dict' in str(type(v))
+        ]
+        filter_false_list_dict_param = [
+            i[0] for i in filter(
+                lambda x: x[0] if any(
+                    x[1]
+                ) is False else '', get_list_dict_param)
+        ]
+
+        filter_required = lambda template: [
+            i for i in dict_validation_template[template]
+            if i in filter_false_list_dict_param
+        ]
+
+        if len(validate_str):
+            print("Há parametros não preenchidos", validate_str)
+        if len(filter_required('stage')) or len(filter_required('tru')):
+            print('Parametros com lista vazia', filter_false_list_dict_param)
 
     def param_dict_control(self) -> dict:
 
