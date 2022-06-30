@@ -35,3 +35,4 @@ class CrudDag(Control):
             for r in dict_replace.items():
                 line = line.replace(*r)
             print(line, end="")
+

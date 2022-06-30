@@ -5,8 +5,6 @@ class Control:
     def __init__(self, yml_conf: dict, kwargs: dict):
         self.yml_conf = yml_conf
         self.kwargs = kwargs
-        self.bash_task = None
-        self.flag_task = None
 
     def validation(self) -> None:
 
@@ -48,7 +46,7 @@ class Control:
             if i in filter_false_list_dict_param
         ]
 
-        filter_requireds = len(filter_required('stage')) or len(filter_required('tru'))
+        filter_requireds = filter_required('stage') or filter_required('tru')
 
         return validate_str, filter_requireds
 
@@ -62,8 +60,8 @@ class Control:
                 self.yml_conf['docker_command']
             ),
             "dag_json_dag_tag": "{0}".format(self.kwargs.get("dag-tag")),
-            "dict_json_bash": "{0}".format(self.bash_task),
-            "dict_json_flag": "{0}".format(self.flag_task),
+            "dict_json_bash": "{0}".format(self.kwargs.get("bash-task")),
+            "dict_json_flag": "{0}".format(self.kwargs.get("flag-task")),
             "dag_json_tb_status_list": "{0}".format(
                 self.kwargs.get("table-status")
             )
