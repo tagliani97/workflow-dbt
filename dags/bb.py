@@ -7,7 +7,7 @@ sys.path.append('/opt/generate_dag')
 from task.stage import Stage
 
 with DAG(
-        dag_id='asd',
+        dag_id='bb',
         schedule_interval='@daily',
         start_date=days_ago(0),
         tags=['example'],
