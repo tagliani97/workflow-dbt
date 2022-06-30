@@ -57,7 +57,7 @@ x-airflow-common:
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
-    - ./generate_dag:/opt/generate_dag
+    - ./generate_dag:/opt/airflow/generate_dag
     - ./plugins:/opt/airflow/plugins
     - ./dbt:/opt/airflow/dbt
     - //var/run/docker.sock:/var/run/docker.sock  
