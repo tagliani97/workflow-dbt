@@ -18,21 +18,15 @@ class Stage(Task):
 
     def create_stage_task(self) -> list:
 
-        flag_dict = {'insert_data': self.postgres_query_id(
-            self.template_type,
-            self.dag_id
-        )}
+        insert_data = self.create_insert_task(self.template_type, self.dag_id)
+
         status_datalake = [
             v(self.table_status_list)
             for k, v in self.operators.items()
             if k == 'trigger_datalake'
         ]
-        flag_task = [
-            v(j, l) for j, l in flag_dict.items()
-            for k, v in self.operators.items()
-            if k == 'flag_operator'
-        ]
+
         dbt_task = self.create_dbt_task()
-        dbt_task.append(flag_task)
+        dbt_task.append(insert_data)
         value = self.create_task_tree(dbt_task, status_datalake)
         return value

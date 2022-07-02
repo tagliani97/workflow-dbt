@@ -22,6 +22,7 @@ with DAG(
         bash_cmd,
         docker_exec,
         docker_dbt_path,
-        python_cmd
+        python_cmd,
+        dag.dag_id
     ).create_tru_task()
 

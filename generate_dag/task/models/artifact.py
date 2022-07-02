@@ -1,6 +1,8 @@
 from ..config.logs import Logger
 from .flag import PostgresFlag
 
+_LOG = Logger()
+
 
 class Auxiliar:
 
@@ -10,6 +12,6 @@ class Auxiliar:
         dag_id = str(context['dag']).split()[1].replace('>', '')
         if 'failed' in str(context['task_instance']):
             query = PostgresFlag.type_postgres_query("failed", dag_id)
+            _LOG.error('DAG FALHOU, INSERIDO FALHA POSTGRES')
             PostgresFlag.execute_postgres_query(query)
-            Logger().error('Flag failed postgres')
         return context

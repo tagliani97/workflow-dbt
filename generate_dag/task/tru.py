@@ -8,13 +8,17 @@ class Tru(Task):
         dbt_dict,
         docker_yml_cmd,
         dbt_yml_path,
-        flag_dict
+        flag_dict,
+        dag_id
     ):
         super().__init__(dbt_dict, docker_yml_cmd, dbt_yml_path)
         self.flag_dict = flag_dict
+        self.dag_id = dag_id
         self.template_type = 'tru'
 
     def create_tru_task(self):
+
+        insert_data = self.create_insert_task(self.template_type, self.dag_id)
 
         flag_task = [
             v(
@@ -25,5 +29,6 @@ class Tru(Task):
         ]
 
         dbt_task = self.create_dbt_task()
+        dbt_task.append(insert_data)
         value = self.create_task_tree(dbt_task, flag_task)
         return value

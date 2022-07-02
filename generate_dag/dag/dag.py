@@ -20,7 +20,7 @@ class Control:
         result = list(set(params_required) - set(validate))
 
         if result:
-            raise AssertionError(
+            print(
                 "Parametro obrigatório não especificado", result
             )
 

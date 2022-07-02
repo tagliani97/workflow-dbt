@@ -5,7 +5,6 @@ from airflow.operators import python_operator
 from airflow.operators.bash_operator import BashOperator
 
 
-
 class Operator:
 
     @staticmethod

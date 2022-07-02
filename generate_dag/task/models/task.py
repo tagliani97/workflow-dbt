@@ -19,6 +19,21 @@ class Task:
 
         return query
 
+    def create_insert_success_task(self, template_type, dag_id):
+
+        flag_insert_default = {'insert_success_data': self.postgres_query_id(
+            template_type,
+            dag_id
+        )}
+
+        flag_task = [
+            v(j, l) for j, l in flag_insert_default.items()
+            for k, v in self.operators.items()
+            if k == 'flag_operator'
+        ]
+
+        return flag_task
+
     def create_dbt_task(self):
 
         dbt_task = []
