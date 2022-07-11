@@ -29,7 +29,7 @@ class CrudDag(Control):
                     new_filename
                 )
             except Exception as e:
-                print("Erro ao copiar arquivo de template", e)
+                print(f"Erro ao copiar arquivo de template {e}")
 
         for line in fileinput.input(new_filename, inplace=True):
             for r in dict_replace.items():

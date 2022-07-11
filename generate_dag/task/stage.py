@@ -14,11 +14,10 @@ class Stage(Task):
         super().__init__(dbt_dict, docker_yml_cmd, dbt_yml_path)
         self.dag_id = dag_id
         self.table_status_list = table_status_list
-        self.template_type = 'stage'
 
     def create_stage_task(self) -> list:
 
-        insert_data = self.create_insert_task(self.template_type, self.dag_id)
+        insert_data = self.create_insert_success_task(self.dag_id)
 
         status_datalake = [
             v(self.table_status_list)

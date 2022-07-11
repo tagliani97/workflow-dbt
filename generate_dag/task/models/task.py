@@ -19,10 +19,10 @@ class Task:
 
         return query
 
-    def create_insert_success_task(self, template_type, dag_id):
+    def create_insert_success_task(self, dag_id):
 
         flag_insert_default = {'insert_success_data': self.postgres_query_id(
-            template_type,
+            'success',
             dag_id
         )}
 

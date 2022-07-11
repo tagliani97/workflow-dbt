@@ -46,10 +46,10 @@ class PostgresFlag:
             "failed": f"""\
                 INSERT INTO {postgres_sch}.{postgres_table}\
                     VALUES ('{dag_id}' , 'failed', '{date}')""",
-            "stage": f"""\
+            "success": f"""\
                 INSERT INTO {postgres_sch}.{postgres_table}\
                     VALUES ('{dag_id}','success', '{date}')""",
-            "tru": f"""\
+            "get_status": f"""\
                 with flag as (\
                     SELECT dag_id, status, MAX(data_execution) data_ref\
                     FROM {postgres_sch}.{postgres_table}\

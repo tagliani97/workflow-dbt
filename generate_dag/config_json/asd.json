@@ -1,6 +1,7 @@
 {
     "dag-id": "asd",
-    "dag-schedule": "@daily",
+    "start-date": "2022-7-11",
+    "dag-schedule": "15 10 * * 1-5",
     "dag-tag": ["example"],
     "template-name": "stage-template",
     "table-status": [],

@@ -1,15 +1,15 @@
 import sys
 from airflow import DAG
-from airflow.utils.dates import days_ago
+from datetime import datetime
 
-sys.path.append('/opt/generate_dag')
+sys.path.append('/opt/airflow/generate_dag')
 
 from task.stage import Stage
 
 with DAG(
         dag_id='asd',
-        schedule_interval='@daily',
-        start_date=days_ago(0),
+        start_date=datetime(2022,7,11),
+        schedule_interval='* 14 * * *',
         tags=['example'],
         catchup=False) as dag:
 

@@ -1,15 +1,15 @@
 import sys
 from airflow import DAG
-from airflow.utils.dates import days_ago
+from datetime import datetime
 
-sys.path.append('/opt/generate_dag')
+sys.path.append('/opt/airflow/generate_dag')
 
 from task.tru import Tru
 
 with DAG(
         dag_id='dag_json_dag_id',
+        start_date=datetime(dag_json_start_date),
         schedule_interval='dag_json_schedule',
-        start_date=days_ago(0),
         tags=dag_json_dag_tag,
         catchup=False) as dag:
 
