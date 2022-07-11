@@ -1,4 +1,5 @@
 {
+    "owner": "tagliani",
     "dag-id": "asd-tru",
     "start-date": "2022-7-11",
     "dag-schedule": "15 10 * * 1-5",

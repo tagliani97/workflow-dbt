@@ -1,17 +1,24 @@
 import sys
 from airflow import DAG
-from datetime import datetime
+from datetime import datetime, timedelta
 
 sys.path.append('/opt/airflow/generate_dag')
 
 from task.tru import Tru
 
+args={
+    'owner': 'tagliani',
+    'retries': 3,
+}
+
 with DAG(
-        dag_id='asd-tru',
-        start_date=datetime(2022,7,11),
-        schedule_interval='* 14 * * *',
-        tags=['example'],
-        catchup=False) as dag:
+    default_args=args,
+    dag_id="asd-tru",
+    start_date=datetime(2022,7,11) - timedelta(days=1),
+    schedule_interval="15 10 * * 1-5",
+    tags=['example'],
+    catchup=False
+) as dag:
 
     bash_cmd = {'task-dbt-1': 'echo teste'}
     python_cmd = {'verifica_nf_trusted': 'dag_nf_trusted'}

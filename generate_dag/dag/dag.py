@@ -9,6 +9,7 @@ class Control:
     def validation(self) -> None:
 
         params_required = [
+            "owner",
             "dag-id",
             "dag-schedule",
             "dag-tag",
@@ -51,6 +52,7 @@ class Control:
             "dag_json_dag_id": self.kwargs.get("dag-id"),
             "dag_json_schedule": self.kwargs.get("dag-schedule"),
             "dag_json_start_date": self.kwargs.get("start-date").replace("-",","),
+            "dag_json_owner": self.kwargs.get("owner"), 
             "dbt_yml_path": self.yml_conf['docker_dbt_path'],
             "docker_yml_cmd": "{0}".format(
                 self.yml_conf['docker_command']
