@@ -1,17 +1,25 @@
 import sys
 from airflow import DAG
-from airflow.utils.dates import days_ago
+from datetime import datetime, timedelta
 
-sys.path.insert(0, '/opt/generate_dag')
+sys.path.append('/opt/airflow/generate_dag')
 
 from task.tru import Tru
 
+args={
+    'owner': 'dag_json_owner',
+    'retries': 3,
+    'retry_delay': timedelta(minutes=5)
+}
+
 with DAG(
-        dag_id='dag_json_dag_id',
-        schedule_interval='dag_json_schedule',
-        start_date=days_ago(0),
-        tags=dag_json_dag_tag,
-        catchup=False) as dag:
+    default_args=args,
+    dag_id="dag_json_dag_id",
+    start_date=datetime(dag_json_start_date) - timedelta(days=1),
+    schedule_interval="dag_json_schedule",
+    tags=dag_json_dag_tag,
+    catchup=False
+) as dag:
 
     bash_cmd = dict_json_bash
     python_cmd = dict_json_flag
@@ -19,9 +27,9 @@ with DAG(
     docker_dbt_path = "dbt_yml_path"
 
     Tru(
-        dag.dag_id,
         bash_cmd,
-        python_cmd,
         docker_exec,
-        docker_dbt_path
+        docker_dbt_path,
+        python_cmd,
+        dag.dag_id
     ).create_tru_task()

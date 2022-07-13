@@ -1,7 +1,7 @@
 from airflow.models.baseoperator import BaseOperator
+from datetime import datetime
 import boto3
 import os
-from datetime import datetime
 
 ACCOUNT_ID = os.getenv('ACCOUNT_ID')
 ACCOUNT_REGION = os.getenv('ACCOUNT_REGION')

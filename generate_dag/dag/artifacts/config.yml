@@ -1,6 +1,6 @@
 airflow_dag_path: '/opt/airflow/dags'
-config_dag: '/opt/generate_dag/config_json/'
-template_path: '/opt/generate_dag/template/'
+config_dag: '/opt/airflow/generate_dag/config_json/'
+template_path: '/opt/airflow/generate_dag/template/'
 
 docker_dbt_path: ''
 docker_dags_path: '/opt/airflow/dags'

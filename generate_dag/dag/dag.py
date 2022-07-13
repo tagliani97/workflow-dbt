@@ -1,63 +1,65 @@
-
+from datetime import datetime
 
 class Control:
 
     def __init__(self, yml_conf: dict, kwargs: dict):
         self.yml_conf = yml_conf
         self.kwargs = kwargs
-        self.bash_task = None
-        self.flag_task = None
-
-    @property
-    def flag_task(self):
-        return self._flag_task
-
-    @property
-    def bash_task(self):
-        return self._bash_task
-
-    @flag_task.setter
-    def flag_task(self, value: dict) -> dict:
-        if 'tru' in self.kwargs.get("template-name"):
-            if 'flag-task' not in self.kwargs:
-                raise Exception("Flag-task não existente")
-            else:
-                value = self.kwargs.get("flag-task")
-        self._flag_task = value
-
-    @bash_task.setter
-    def bash_task(self, value: dict) -> dict:
-        if 'bash-task' not in self.kwargs:
-            raise Exception("Flag-task não existente")
-        else:
-            value = self.kwargs.get("bash-task")
-        self._bash_task = value
 
     def validation(self) -> None:
 
         params_required = [
+            "owner",
             "dag-id",
             "dag-schedule",
             "dag-tag",
-            "template-name"
+            "template-name",
+            "edit-template",
+            "start-date",
+            "bash-task"
         ]
+
         validate = [i for i in self.kwargs.keys() if i in params_required]
-        if len(validate) < len(params_required):
-            result = list(set(params_required) - set(validate))
-            raise Exception("Parametro obrigatório não especificado", result)
+        result = list(set(params_required) - set(validate))
+
+        if result:
+            print(
+                "Parametro obrigatório não especificado", result
+            )
+
+        validate_str = tuple(filter(
+            lambda x: x[0] if x[1] is None or x[1] == '' else '', [
+                [k, v] for k, v in self.kwargs.items()]
+            ))
+
+        get_list_dict_param = [
+            [k, v] for k, v in self.kwargs.items()
+            if 'dict' in str(type(v))
+        ]
+
+        filter_dict_param = [
+            i[0] for i in filter(
+                lambda x: x[0] if any(
+                    x[1]
+                ) is False else '', get_list_dict_param)
+        ]
+
+        return validate_str, filter_dict_param
 
     def param_dict_control(self) -> dict:
 
         dict = {
             "dag_json_dag_id": self.kwargs.get("dag-id"),
             "dag_json_schedule": self.kwargs.get("dag-schedule"),
+            "dag_json_start_date": self.kwargs.get("start-date").replace("-",","),
+            "dag_json_owner": self.kwargs.get("owner"), 
             "dbt_yml_path": self.yml_conf['docker_dbt_path'],
             "docker_yml_cmd": "{0}".format(
                 self.yml_conf['docker_command']
             ),
             "dag_json_dag_tag": "{0}".format(self.kwargs.get("dag-tag")),
-            "dict_json_bash": "{0}".format(self.bash_task),
-            "dict_json_flag": "{0}".format(self.flag_task),
+            "dict_json_bash": "{0}".format(self.kwargs.get("bash-task")),
+            "dict_json_flag": "{0}".format(self.kwargs.get("flag-task")),
             "dag_json_tb_status_list": "{0}".format(
                 self.kwargs.get("table-status")
             )

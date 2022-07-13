@@ -1,7 +1,7 @@
-import time
-from boto3.dynamodb.conditions import Attr
+from ..config.boto import InitService
 from datetime import datetime, timedelta
-from .boto import InitService
+from boto3.dynamodb.conditions import Attr
+import time
 
 
 class DynamoDB:

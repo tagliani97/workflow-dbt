@@ -19,6 +19,21 @@ class Task:
 
         return query
 
+    def create_insert_success_task(self, dag_id):
+
+        flag_insert_default = {'insert_success_data': self.postgres_query_id(
+            'success',
+            dag_id
+        )}
+
+        flag_task = [
+            v(j, l) for j, l in flag_insert_default.items()
+            for k, v in self.operators.items()
+            if k == 'flag_operator'
+        ]
+
+        return flag_task
+
     def create_dbt_task(self):
 
         dbt_task = []
@@ -29,7 +44,8 @@ class Task:
                         v(
                             j,
                             "{0} 'cd {1} ; dbt deps ; {2}' ".format(
-                                self.docker_yml_cmd[0], self.dbt_yml_path[0], l)
+                                self.docker_yml_cmd[0],
+                                self.dbt_yml_path[0], l)
                             )
                         )
         return dbt_task

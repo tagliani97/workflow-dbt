@@ -1,5 +1,9 @@
+from ..config.logs import Logger
+from ..config.airflow_conn import Connection
 from datetime import datetime, timezone
-from ..config import Connection
+import time
+
+_LOG = Logger()
 
 
 class PostgresFlag:
@@ -7,21 +11,24 @@ class PostgresFlag:
     @staticmethod
     def execute_postgres_query(query: str) -> None:
 
-        psd_arg = Connection.postgress_conection()
-        cur = psd_arg[0]
-        conn = psd_arg[1]
-        print([query])
+        _LOG.info(" ".join(query.split()))
+        cur, conn = Connection.postgress_conection()
         try:
-            if "INSERT" not in str(query):
+            if "INSERT" not in query:
                 cur.execute(query)
+                result = eval(str(cur.fetchall()[0]).replace("datetime.", ""))
+                msg = "STAGE STATUS -> (STATUS: {0} DATA: {1})".format(
+                    result[0],
+                    datetime.strftime(result[1], '%Y-%m-%d %H:%M:%S')
+                )
+                _LOG.debug(msg)
+                if "success" not in result[0]:
+                    raise ValueError("FALHA NA ULTIMA EXECUCAO STAGE")
                 conn.commit()
-                result = str(cur.fetchall()[0])
-                if "success" not in result:
-                    raise Exception("Falha na ultima execucao stage")
             else:
                 cur.execute(query)
                 conn.commit()
-        except Exception as e:
+        except (Exception, ValueError) as e:
             raise(e)
         finally:
             cur.close()
@@ -39,10 +46,10 @@ class PostgresFlag:
             "failed": f"""\
                 INSERT INTO {postgres_sch}.{postgres_table}\
                     VALUES ('{dag_id}' , 'failed', '{date}')""",
-            "stage": f"""\
+            "success": f"""\
                 INSERT INTO {postgres_sch}.{postgres_table}\
                     VALUES ('{dag_id}','success', '{date}')""",
-            "tru": f"""\
+            "get_status": f"""\
                 with flag as (\
                     SELECT dag_id, status, MAX(data_execution) data_ref\
                     FROM {postgres_sch}.{postgres_table}\

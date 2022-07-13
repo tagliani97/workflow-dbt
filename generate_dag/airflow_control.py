@@ -19,9 +19,12 @@ class Airflow:
             if kwargs.get("delete-dag"):
                 init_control.delete_dag()
             else:
-                init_control.validation()
-                dict_replace = init_control.param_dict_control()
-                init_control.create_dag(dict_replace)
+                validate_str, filter_dict = init_control.validation()
+                if not validate_str and not filter_dict:
+                    dict_replace = init_control.param_dict_control()
+                    init_control.create_dag(
+                        dict_replace, kwargs.get("dag-id")
+                    )
 
 
 if __name__ == '__main__':

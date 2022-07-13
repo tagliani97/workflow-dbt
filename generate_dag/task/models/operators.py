@@ -1,10 +1,8 @@
-
+from ..services.cloudwatch import CloudWatchLogs
+from .artifact import Auxiliar
+from .flag import PostgresFlag
 from airflow.operators import python_operator
 from airflow.operators.bash_operator import BashOperator
-
-from ..services.cloudwatch import CloudWatchLogs
-from .flag import PostgresFlag
-from .utils import Auxiliar
 
 
 class Operator:
